@@ -1,0 +1,243 @@
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-sans); }
+  .app { max-width: 600px; margin: 0 auto; padding: 1.5rem 1rem; }
+  .header { text-align: center; margin-bottom: 1.5rem; }
+  .header h1 { font-size: 22px; font-weight: 500; color: var(--color-text-primary); }
+  .header p { font-size: 14px; color: var(--color-text-secondary); margin-top: 4px; }
+  .ad-banner { background: var(--color-background-secondary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 10px 16px; text-align: center; font-size: 12px; color: var(--color-text-tertiary); margin-bottom: 1.5rem; }
+  .filters { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1.25rem; }
+  .filter-group label { font-size: 12px; color: var(--color-text-secondary); display: block; margin-bottom: 4px; }
+  .filter-group select { width: 100%; }
+  .ingredients-box { margin-bottom: 1.25rem; }
+  .ingredients-box label { font-size: 12px; color: var(--color-text-secondary); display: block; margin-bottom: 4px; }
+  .tag-area { display: flex; flex-wrap: wrap; gap: 6px; background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 8px; min-height: 44px; cursor: text; }
+  .tag { background: var(--color-background-info); color: var(--color-text-info); font-size: 12px; padding: 3px 10px; border-radius: 999px; display: flex; align-items: center; gap: 5px; }
+  .tag button { background: none; border: none; cursor: pointer; color: var(--color-text-info); font-size: 14px; padding: 0; line-height: 1; }
+  .tag-input { border: none; outline: none; font-size: 13px; background: transparent; color: var(--color-text-primary); min-width: 80px; flex: 1; }
+  .pick-btn { width: 100%; padding: 12px; font-size: 16px; font-weight: 500; background: #1D9E75; color: #fff; border: none; border-radius: var(--border-radius-md); cursor: pointer; transition: opacity 0.15s; margin-bottom: 1.25rem; }
+  .pick-btn:hover { opacity: 0.88; }
+  .result-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1.25rem; display: none; margin-bottom: 1.25rem; }
+  .result-card.show { display: block; }
+  .meal-name { font-size: 20px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 4px; }
+  .meal-meta { display: flex; gap: 12px; font-size: 12px; color: var(--color-text-secondary); margin-bottom: 12px; flex-wrap: wrap; }
+  .meal-meta span { display: flex; align-items: center; gap: 4px; }
+  .steps-title { font-size: 13px; font-weight: 500; color: var(--color-text-secondary); margin-bottom: 8px; }
+  .steps-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+  .steps-list li { font-size: 13px; color: var(--color-text-primary); display: flex; gap: 10px; align-items: flex-start; }
+  .step-num { background: #1D9E75; color: #fff; border-radius: 50%; min-width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 500; }
+  .action-row { display: flex; gap: 8px; margin-top: 12px; }
+  .action-row button { flex: 1; font-size: 13px; }
+  .history-section { margin-bottom: 1rem; }
+  .history-title { font-size: 12px; color: var(--color-text-secondary); margin-bottom: 6px; }
+  .history-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .history-chip { font-size: 12px; color: var(--color-text-secondary); background: var(--color-background-secondary); border: 0.5px solid var(--color-border-tertiary); border-radius: 999px; padding: 3px 10px; cursor: pointer; }
+  .history-chip:hover { border-color: var(--color-border-primary); color: var(--color-text-primary); }
+  .ad-mid { background: var(--color-background-secondary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 14px; text-align: center; font-size: 12px; color: var(--color-text-tertiary); }
+</style>
+
+<div class="app">
+  <h2 class="sr-only">Meal Picker — find what to cook based on your ingredients and preferences</h2>
+
+  <div class="header">
+    <div style="font-size:36px; margin-bottom:6px;" aria-hidden="true"><i class="ti ti-tools-kitchen-2" style="font-size:36px; color:#1D9E75;"></i></div>
+    <h1>What should I eat?</h1>
+    <p>Tell us what you have. We'll pick a meal.</p>
+  </div>
+
+  <div class="ad-banner" role="complementary" aria-label="Advertisement">
+    <i class="ti ti-speakerphone" aria-hidden="true"></i> Advertisement — Your AdSense ad appears here
+  </div>
+
+  <div class="filters">
+    <div class="filter-group">
+      <label for="cuisine">Cuisine</label>
+      <select id="cuisine">
+        <option value="any">Any cuisine</option>
+        <option value="indian">Indian</option>
+        <option value="italian">Italian</option>
+        <option value="chinese">Chinese</option>
+        <option value="mexican">Mexican</option>
+        <option value="american">American</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label for="mealtype">Meal type</label>
+      <select id="mealtype">
+        <option value="any">Any type</option>
+        <option value="breakfast">Breakfast</option>
+        <option value="lunch">Lunch</option>
+        <option value="dinner">Dinner</option>
+        <option value="snack">Snack</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label for="time">Cook time</label>
+      <select id="time">
+        <option value="any">Any time</option>
+        <option value="15">Under 15 min</option>
+        <option value="30">Under 30 min</option>
+        <option value="60">Under 60 min</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label for="diet">Diet</label>
+      <select id="diet">
+        <option value="any">No restriction</option>
+        <option value="vegetarian">Vegetarian</option>
+        <option value="vegan">Vegan</option>
+        <option value="glutenfree">Gluten free</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="ingredients-box">
+    <label>Ingredients you have (press Enter to add)</label>
+    <div class="tag-area" id="tag-area">
+      <input class="tag-input" id="tag-input" placeholder="e.g. eggs, tomato, rice..." />
+    </div>
+  </div>
+
+  <button class="pick-btn" onclick="pickMeal()">
+    <i class="ti ti-dice-5" aria-hidden="true"></i> Pick my meal
+  </button>
+
+  <div class="result-card" id="result-card">
+    <div class="meal-name" id="meal-name"></div>
+    <div class="meal-meta" id="meal-meta"></div>
+    <div class="steps-title">How to make it</div>
+    <ol class="steps-list" id="steps-list"></ol>
+    <div class="action-row">
+      <button onclick="pickMeal()"><i class="ti ti-refresh" aria-hidden="true"></i> Try another</button>
+      <button onclick="saveMeal()"><i class="ti ti-heart" aria-hidden="true"></i> Save this</button>
+    </div>
+  </div>
+
+  <div class="history-section" id="history-section" style="display:none;">
+    <div class="history-title">Saved meals</div>
+    <div class="history-chips" id="history-chips"></div>
+  </div>
+
+  <div class="ad-mid" role="complementary" aria-label="Advertisement">
+    <i class="ti ti-ad" aria-hidden="true"></i> Sponsored — Your second AdSense unit goes here (more earnings!)
+  </div>
+</div>
+
+<script>
+const meals = [
+  { name:"Masala Omelette", cuisine:"indian", type:"breakfast", time:10, diet:["vegetarian"], meta:"10 min · Indian · Vegetarian", steps:["Beat 2 eggs with salt, chilli, and cumin.","Chop onion, tomato, and coriander.","Cook onion in oil for 2 min, add tomato.","Pour eggs over, fold when set. Serve hot."] },
+  { name:"Dal Tadka", cuisine:"indian", type:"lunch", time:30, diet:["vegan","vegetarian"], meta:"30 min · Indian · Vegan", steps:["Boil 1 cup toor dal until soft.","Fry onion, garlic, tomato in oil.","Add turmeric, cumin, chilli powder.","Mix dal in, simmer 5 min. Add lemon juice."] },
+  { name:"Pasta Aglio e Olio", cuisine:"italian", type:"dinner", time:20, diet:["vegetarian"], meta:"20 min · Italian · Vegetarian", steps:["Boil pasta until al dente.","Sauté garlic slices in olive oil until golden.","Add chilli flakes and parsley.","Toss pasta in, add pasta water as needed."] },
+  { name:"Fried Rice", cuisine:"chinese", type:"lunch", time:15, diet:["vegetarian","vegan"], meta:"15 min · Chinese · Vegan option", steps:["Heat wok, add oil and garlic.","Add leftover rice, stir fry on high heat.","Push rice aside, scramble eggs in centre.","Add soy sauce, spring onion. Mix and serve."] },
+  { name:"Avocado Toast", cuisine:"american", type:"breakfast", time:10, diet:["vegan","vegetarian","glutenfree"], meta:"10 min · American · Vegan", steps:["Toast your bread slices.","Mash avocado with lemon, salt, chilli.","Spread on toast generously.","Top with seeds or cherry tomatoes."] },
+  { name:"Quesadilla", cuisine:"mexican", type:"snack", time:15, diet:["vegetarian"], meta:"15 min · Mexican · Vegetarian", steps:["Place tortilla in dry pan on medium heat.","Add cheese and toppings on one half.","Fold tortilla, press gently.","Flip when golden. Slice and serve."] },
+  { name:"Paneer Bhurji", cuisine:"indian", type:"dinner", time:20, diet:["vegetarian"], meta:"20 min · Indian · Vegetarian", steps:["Crumble paneer into small pieces.","Fry onion and tomato with spices.","Add paneer, stir well for 5 min.","Garnish with coriander, serve with roti."] },
+  { name:"Margherita Pizza", cuisine:"italian", type:"dinner", time:30, diet:["vegetarian"], meta:"30 min · Italian · Vegetarian", steps:["Spread tomato sauce on pizza base.","Top with mozzarella and basil.","Bake at 220°C for 12–15 min.","Drizzle olive oil before serving."] },
+  { name:"Banana Pancakes", cuisine:"american", type:"breakfast", time:15, diet:["vegetarian"], meta:"15 min · American · Vegetarian", steps:["Mash 1 ripe banana with 2 eggs.","Add a pinch of salt and cinnamon.","Cook small rounds on low heat.","Flip when bubbles form. Serve with honey."] },
+  { name:"Chana Chaat", cuisine:"indian", type:"snack", time:10, diet:["vegan","vegetarian","glutenfree"], meta:"10 min · Indian · Vegan", steps:["Drain canned chickpeas and rinse.","Add chopped onion, tomato, cucumber.","Season with chaat masala, lemon, salt.","Mix well and top with coriander."] },
+];
+
+let tags = [];
+let saved = [];
+let lastPick = null;
+
+const tagArea = document.getElementById('tag-area');
+const tagInput = document.getElementById('tag-input');
+
+tagInput.addEventListener('keydown', e => {
+  if ((e.key === 'Enter' || e.key === ',') && tagInput.value.trim()) {
+    e.preventDefault();
+    addTag(tagInput.value.trim());
+    tagInput.value = '';
+  } else if (e.key === 'Backspace' && !tagInput.value && tags.length) {
+    removeTag(tags.length - 1);
+  }
+});
+
+tagArea.addEventListener('click', () => tagInput.focus());
+
+function addTag(val) {
+  val = val.replace(/,/g,'').trim();
+  if (!val || tags.includes(val.toLowerCase())) return;
+  tags.push(val.toLowerCase());
+  renderTags();
+}
+
+function removeTag(i) {
+  tags.splice(i, 1);
+  renderTags();
+}
+
+function renderTags() {
+  const existing = tagArea.querySelectorAll('.tag');
+  existing.forEach(t => t.remove());
+  tags.forEach((t, i) => {
+    const el = document.createElement('div');
+    el.className = 'tag';
+    el.innerHTML = `${t}<button onclick="removeTag(${i})" aria-label="Remove ${t}">&times;</button>`;
+    tagArea.insertBefore(el, tagInput);
+  });
+}
+
+function pickMeal() {
+  const cuisine = document.getElementById('cuisine').value;
+  const mealtype = document.getElementById('mealtype').value;
+  const time = document.getElementById('time').value;
+  const diet = document.getElementById('diet').value;
+
+  let pool = meals.filter(m => {
+    if (cuisine !== 'any' && m.cuisine !== cuisine) return false;
+    if (mealtype !== 'any' && m.type !== mealtype) return false;
+    if (time !== 'any' && m.time > parseInt(time)) return false;
+    if (diet !== 'any' && !m.diet.includes(diet)) return false;
+    return true;
+  });
+
+  if (lastPick && pool.length > 1) pool = pool.filter(m => m.name !== lastPick.name);
+  if (!pool.length) pool = meals;
+
+  const pick = pool[Math.floor(Math.random() * pool.length)];
+  lastPick = pick;
+  showResult(pick);
+}
+
+function showResult(meal) {
+  document.getElementById('meal-name').textContent = meal.name;
+  document.getElementById('meal-meta').innerHTML = `<span><i class="ti ti-clock" aria-hidden="true"></i> ${meal.meta}</span>`;
+  const list = document.getElementById('steps-list');
+  list.innerHTML = '';
+  meal.steps.forEach((s, i) => {
+    const li = document.createElement('li');
+    li.innerHTML = `<span class="step-num">${i+1}</span><span>${s}</span>`;
+    list.appendChild(li);
+  });
+  const card = document.getElementById('result-card');
+  card.classList.add('show');
+  card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function saveMeal() {
+  if (!lastPick || saved.includes(lastPick.name)) return;
+  saved.push(lastPick.name);
+  renderSaved();
+}
+
+function renderSaved() {
+  const sec = document.getElementById('history-section');
+  const chips = document.getElementById('history-chips');
+  if (!saved.length) { sec.style.display = 'none'; return; }
+  sec.style.display = 'block';
+  chips.innerHTML = '';
+  saved.forEach(name => {
+    const chip = document.createElement('div');
+    chip.className = 'history-chip';
+    chip.textContent = name;
+    chip.onclick = () => {
+      const m = meals.find(x => x.name === name);
+      if (m) showResult(m);
+    };
+    chips.appendChild(chip);
+  });
+}
+</script>
