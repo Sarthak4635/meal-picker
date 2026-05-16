@@ -1,246 +1,646 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Meal Picker — What should I eat?</title>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Meal Picker — What should I eat today?</title>
 
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-DB8JB52GQD"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-DB8JB52GQD');
-  </script>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: system-ui, sans-serif; background: #f5f5f0; color: #1a1a1a; min-height: 100vh; padding: 1.5rem 1rem; }
-    .app { max-width: 600px; margin: 0 auto; }
-    h1 { font-size: 24px; font-weight: 600; text-align: center; margin-bottom: 4px; }
-    .subtitle { text-align: center; color: #666; font-size: 14px; margin-bottom: 1.5rem; }
-    .icon-wrap { text-align: center; font-size: 40px; margin-bottom: 8px; }
-    .ad-banner { background: #e8e8e0; border: 1px dashed #bbb; border-radius: 8px; padding: 10px 16px; text-align: center; font-size: 12px; color: #999; margin-bottom: 1.5rem; }
-    .filters { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1.25rem; }
-    .filter-group label { font-size: 12px; color: #666; display: block; margin-bottom: 4px; }
-    select { width: 100%; padding: 8px 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; background: #fff; color: #1a1a1a; outline: none; }
-    select:focus { border-color: #1D9E75; }
-    .ingredients-box { margin-bottom: 1.25rem; }
-    .ingredients-box label { font-size: 12px; color: #666; display: block; margin-bottom: 4px; }
-    .tag-area { display: flex; flex-wrap: wrap; gap: 6px; background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 8px; min-height: 44px; cursor: text; }
-    .tag-area:focus-within { border-color: #1D9E75; }
-    .tag { background: #e1f5ee; color: #0F6E56; font-size: 12px; padding: 3px 10px; border-radius: 999px; display: flex; align-items: center; gap: 5px; }
-    .tag button { background: none; border: none; cursor: pointer; color: #0F6E56; font-size: 15px; padding: 0; line-height: 1; }
-    .tag-input { border: none; outline: none; font-size: 13px; background: transparent; color: #1a1a1a; min-width: 80px; flex: 1; }
-    .pick-btn { width: 100%; padding: 13px; font-size: 16px; font-weight: 600; background: #1D9E75; color: #fff; border: none; border-radius: 10px; cursor: pointer; transition: opacity 0.15s; margin-bottom: 1.25rem; }
-    .pick-btn:hover { opacity: 0.88; }
-    .result-card { background: #fff; border: 1px solid #e0e0d8; border-radius: 12px; padding: 1.25rem; display: none; margin-bottom: 1.25rem; }
-    .result-card.show { display: block; }
-    .meal-name { font-size: 22px; font-weight: 600; margin-bottom: 4px; }
-    .meal-meta { font-size: 12px; color: #666; margin-bottom: 14px; }
-    .steps-title { font-size: 13px; font-weight: 600; color: #666; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
-    .steps-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
-    .steps-list li { font-size: 14px; color: #1a1a1a; display: flex; gap: 10px; align-items: flex-start; }
-    .step-num { background: #1D9E75; color: #fff; border-radius: 50%; min-width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; flex-shrink: 0; }
-    .action-row { display: flex; gap: 8px; margin-top: 14px; }
-    .action-btn { flex: 1; padding: 9px; font-size: 13px; border: 1px solid #ddd; border-radius: 8px; background: #fff; cursor: pointer; color: #1a1a1a; transition: background 0.1s; }
-    .action-btn:hover { background: #f5f5f0; }
-    .no-results { display: none; text-align: center; padding: 1.5rem; background: #fff; border: 1px solid #e0e0d8; border-radius: 12px; margin-bottom: 1.25rem; }
-    .no-results .emoji { font-size: 32px; margin-bottom: 8px; }
-    .no-results strong { display: block; margin-bottom: 4px; }
-    .no-results p { font-size: 13px; color: #666; }
-    .history-section { display: none; margin-bottom: 1.25rem; }
-    .history-title { font-size: 12px; color: #666; margin-bottom: 6px; }
-    .history-chips { display: flex; flex-wrap: wrap; gap: 6px; }
-    .history-chip { font-size: 12px; color: #555; background: #fff; border: 1px solid #ddd; border-radius: 999px; padding: 4px 12px; cursor: pointer; }
-    .history-chip:hover { border-color: #1D9E75; color: #0F6E56; }
-    .ad-mid { background: #e8e8e0; border: 1px dashed #bbb; border-radius: 8px; padding: 14px; text-align: center; font-size: 12px; color: #999; margin-bottom: 1.25rem; }
-    footer { text-align: center; font-size: 12px; color: #aaa; margin-top: 1rem; padding-bottom: 2rem; }
-  </style>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DB8JB52GQD"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-DB8JB52GQD');
+</script>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+
+:root {
+  --green: #16a377;
+  --green-dark: #0e7a59;
+  --green-light: #e6f7f1;
+  --green-glow: rgba(22,163,119,0.15);
+  --bg: #0f1117;
+  --card: #1a1d27;
+  --card2: #21253a;
+  --border: rgba(255,255,255,0.07);
+  --text: #f0f0f0;
+  --muted: #8b8fa8;
+  --radius: 14px;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  padding: 0;
+}
+
+/* ── HERO HEADER ── */
+.hero {
+  background: linear-gradient(135deg, #0f1117 0%, #131826 50%, #0d1f17 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 48px 24px 40px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(22,163,119,0.12), transparent 70%);
+  top: -150px; left: 50%; transform: translateX(-50%);
+  pointer-events: none;
+}
+.hero-emoji {
+  font-size: 56px;
+  display: block;
+  margin-bottom: 16px;
+  animation: float 3s ease-in-out infinite;
+}
+@keyframes float {
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-8px);}
+}
+.hero h1 {
+  font-size: clamp(28px, 5vw, 42px);
+  font-weight: 700;
+  line-height: 1.1;
+  margin-bottom: 10px;
+  letter-spacing: -0.5px;
+}
+.hero h1 span { color: var(--green); }
+.hero p {
+  font-size: 15px;
+  color: var(--muted);
+  max-width: 380px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+.stats-row {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin-top: 24px;
+  flex-wrap: wrap;
+}
+.stat {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 6px 16px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.stat b { color: var(--green); }
+
+/* ── MAIN CONTENT ── */
+.main {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 32px 20px 60px;
+}
+
+/* ── AD UNIT ── */
+.ad-unit {
+  background: rgba(255,255,255,0.03);
+  border: 1px dashed rgba(255,255,255,0.1);
+  border-radius: var(--radius);
+  padding: 12px;
+  text-align: center;
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 28px;
+  letter-spacing: 0.5px;
+}
+
+/* ── SECTION LABEL ── */
+.section-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  margin-bottom: 10px;
+}
+
+/* ── FILTERS ── */
+.filters-wrap { margin-bottom: 20px; }
+.filters-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.filter-group { display: flex; flex-direction: column; gap: 6px; }
+.filter-group label { font-size: 11px; color: var(--muted); font-weight: 500; letter-spacing: 0.5px; }
+select {
+  width: 100%;
+  padding: 10px 12px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  font-size: 13px;
+  font-family: inherit;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.2s;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%238b8fa8' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 32px;
+}
+select:focus { border-color: var(--green); }
+select option { background: #1a1d27; }
+
+/* ── INGREDIENTS ── */
+.ingredients-wrap { margin-bottom: 24px; }
+.ingredients-hint {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 6px;
+  line-height: 1.5;
+}
+.ingredients-hint b { color: var(--green); }
+.tag-area {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px;
+  min-height: 50px;
+  cursor: text;
+  transition: border-color 0.2s;
+}
+.tag-area:focus-within { border-color: var(--green); box-shadow: 0 0 0 3px var(--green-glow); }
+.tag {
+  background: rgba(22,163,119,0.15);
+  border: 1px solid rgba(22,163,119,0.3);
+  color: #5edfb0;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  animation: tagPop 0.15s ease;
+}
+@keyframes tagPop { from{transform:scale(0.85);opacity:0;} to{transform:scale(1);opacity:1;} }
+.tag button {
+  background: none; border: none; cursor: pointer;
+  color: rgba(94,223,176,0.6); font-size: 14px; padding: 0; line-height: 1;
+}
+.tag button:hover { color: #5edfb0; }
+.tag-input {
+  border: none; outline: none;
+  font-size: 13px; background: transparent;
+  color: var(--text); min-width: 100px; flex: 1;
+  font-family: inherit;
+}
+.tag-input::placeholder { color: var(--muted); }
+
+/* ── PICK BUTTON ── */
+.pick-btn {
+  width: 100%;
+  padding: 16px;
+  font-size: 16px;
+  font-weight: 600;
+  font-family: inherit;
+  background: linear-gradient(135deg, var(--green), var(--green-dark));
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  margin-bottom: 28px;
+  transition: all 0.2s;
+  box-shadow: 0 4px 20px rgba(22,163,119,0.3);
+  position: relative;
+  overflow: hidden;
+}
+.pick-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
+}
+.pick-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 28px rgba(22,163,119,0.4); }
+.pick-btn:active { transform: translateY(0); }
+.pick-btn.loading { opacity: 0.7; cursor: not-allowed; }
+
+/* ── RESULT CARD ── */
+.result-card {
+  display: none;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-bottom: 24px;
+  animation: slideUp 0.25s ease;
+}
+@keyframes slideUp {
+  from{transform:translateY(12px);opacity:0;}
+  to{transform:translateY(0);opacity:1;}
+}
+.result-card.show { display: block; }
+.result-header {
+  padding: 20px 20px 16px;
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(135deg, rgba(22,163,119,0.08), transparent);
+}
+.result-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(22,163,119,0.15);
+  border: 1px solid rgba(22,163,119,0.25);
+  border-radius: 999px;
+  padding: 3px 10px;
+  font-size: 10px;
+  color: #5edfb0;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  margin-bottom: 10px;
+}
+.meal-name {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  line-height: 1.2;
+}
+.meal-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.meal-tag {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 3px 10px;
+  font-size: 11px;
+  color: var(--muted);
+}
+.ingredient-match {
+  margin-top: 10px;
+  font-size: 12px;
+  color: #5edfb0;
+  display: none;
+}
+.result-body { padding: 20px; }
+.steps-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 14px;
+}
+.steps-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+.steps-list li {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  font-size: 14px;
+  color: #ccc;
+  line-height: 1.5;
+}
+.step-num {
+  background: var(--green);
+  color: #fff;
+  border-radius: 50%;
+  min-width: 24px; height: 24px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.result-footer {
+  padding: 14px 20px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  gap: 10px;
+}
+.action-btn {
+  flex: 1; padding: 10px;
+  font-size: 13px; font-weight: 500;
+  font-family: inherit;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.15s;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.04);
+  color: var(--text);
+}
+.action-btn:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.15); }
+.action-btn.primary {
+  background: rgba(22,163,119,0.12);
+  border-color: rgba(22,163,119,0.25);
+  color: #5edfb0;
+}
+.action-btn.primary:hover { background: rgba(22,163,119,0.2); }
+
+/* ── NO RESULTS ── */
+.no-results {
+  display: none;
+  text-align: center;
+  padding: 40px 20px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 24px;
+}
+.no-results .nr-emoji { font-size: 40px; margin-bottom: 12px; }
+.no-results h3 { font-size: 16px; margin-bottom: 6px; }
+.no-results p { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+/* ── SAVED MEALS ── */
+.saved-section { display: none; margin-bottom: 24px; }
+.saved-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.saved-chip {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 12px;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex; align-items: center; gap: 6px;
+}
+.saved-chip:hover { border-color: var(--green); color: #5edfb0; }
+
+/* ── AD MID ── */
+.ad-mid {
+  background: rgba(255,255,255,0.02);
+  border: 1px dashed rgba(255,255,255,0.08);
+  border-radius: var(--radius);
+  padding: 14px;
+  text-align: center;
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 24px;
+}
+
+/* ── FOOTER ── */
+footer {
+  text-align: center;
+  font-size: 12px;
+  color: var(--muted);
+  padding-bottom: 2rem;
+  margin-top: 8px;
+}
+
+/* ── RESPONSIVE ── */
+@media(max-width:480px) {
+  .filters-grid { grid-template-columns: 1fr; }
+  .hero { padding: 36px 20px 32px; }
+}
+</style>
 </head>
 <body>
-<div class="app">
 
-  <div class="icon-wrap">🍽️</div>
-  <h1>What should I eat?</h1>
-  <p class="subtitle">Tell us what you have. We'll pick a meal.</p>
+<!-- HERO -->
+<div class="hero">
+  <span class="hero-emoji">🍽️</span>
+  <h1>Can't decide <span>what to eat?</span></h1>
+  <p>Pick from 150+ dishes across 9 world cuisines. Filter by diet, time & ingredients you already have.</p>
+  <div class="stats-row">
+    <div class="stat"><b>150+</b> dishes</div>
+    <div class="stat"><b>9</b> cuisines</div>
+    <div class="stat"><b>100%</b> free</div>
+  </div>
+</div>
 
-  <!-- AD UNIT 1: Replace with your Google AdSense code -->
-  <div class="ad-banner">Advertisement — Replace with Google AdSense code</div>
+<div class="main">
 
-  <div class="filters">
-    <div class="filter-group">
-      <label for="cuisine">Cuisine</label>
-      <select id="cuisine">
-        <option value="any">Any cuisine</option>
-        <option value="indian">🍛 Indian</option>
-        <option value="italian">🍝 Italian</option>
-        <option value="chinese">🍜 Chinese</option>
-        <option value="mexican">🌮 Mexican</option>
-        <option value="american">🇺🇸 American</option>
-        <option value="japanese">🍱 Japanese</option>
-        <option value="thai">🇹🇭 Thai</option>
-        <option value="lebanese">🧆 Lebanese</option>
-        <option value="mediterranean">🫒 Mediterranean</option>
-      </select>
-    </div>
-    <div class="filter-group">
-      <label for="mealtype">Meal type</label>
-      <select id="mealtype">
-        <option value="any">Any type</option>
-        <option value="breakfast">Breakfast</option>
-        <option value="lunch">Lunch</option>
-        <option value="dinner">Dinner</option>
-        <option value="snack">Snack</option>
-      </select>
-    </div>
-    <div class="filter-group">
-      <label for="time">Cook time</label>
-      <select id="time">
-        <option value="any">Any time</option>
-        <option value="15">Under 15 min</option>
-        <option value="30">Under 30 min</option>
-        <option value="60">Under 60 min</option>
-      </select>
-    </div>
-    <div class="filter-group">
-      <label for="diet">Diet</label>
-      <select id="diet">
-        <option value="any">No restriction</option>
-        <option value="vegetarian">Vegetarian</option>
-        <option value="vegan">Vegan</option>
-        <option value="glutenfree">Gluten free</option>
-      </select>
+  <!-- AD UNIT 1 -->
+  <div class="ad-unit">📢 Advertisement — Replace with Google AdSense code</div>
+
+  <!-- FILTERS -->
+  <div class="filters-wrap">
+    <div class="section-label">Filters</div>
+    <div class="filters-grid">
+      <div class="filter-group">
+        <label for="cuisine">Cuisine</label>
+        <select id="cuisine">
+          <option value="any">🌍 Any cuisine</option>
+          <option value="indian">🍛 Indian</option>
+          <option value="italian">🍝 Italian</option>
+          <option value="chinese">🍜 Chinese</option>
+          <option value="mexican">🌮 Mexican</option>
+          <option value="american">🇺🇸 American</option>
+          <option value="japanese">🍱 Japanese</option>
+          <option value="thai">🇹🇭 Thai</option>
+          <option value="lebanese">🧆 Lebanese</option>
+          <option value="mediterranean">🫒 Mediterranean</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="mealtype">Meal type</label>
+        <select id="mealtype">
+          <option value="any">🍴 Any type</option>
+          <option value="breakfast">🌅 Breakfast</option>
+          <option value="lunch">☀️ Lunch</option>
+          <option value="dinner">🌙 Dinner</option>
+          <option value="snack">🍿 Snack</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="time">Cook time</label>
+        <select id="time">
+          <option value="any">⏱ Any time</option>
+          <option value="15">⚡ Under 15 min</option>
+          <option value="30">🕐 Under 30 min</option>
+          <option value="60">🕐 Under 60 min</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="diet">Diet</label>
+        <select id="diet">
+          <option value="any">🍽️ No restriction</option>
+          <option value="vegetarian">🌱 Vegetarian</option>
+          <option value="vegan">🌿 Vegan</option>
+          <option value="glutenfree">🚫🌾 Gluten free</option>
+        </select>
+      </div>
     </div>
   </div>
 
-  <div class="ingredients-box">
-    <label>Ingredients you have (type and press Enter)</label>
+  <!-- INGREDIENTS -->
+  <div class="ingredients-wrap">
+    <div class="section-label">Ingredients you have</div>
     <div class="tag-area" id="tag-area">
-      <input class="tag-input" id="tag-input" placeholder="e.g. eggs, tomato, rice..." />
+      <input class="tag-input" id="tag-input" placeholder="Type an ingredient and press Enter..." />
     </div>
+    <p class="ingredients-hint">Add ingredients like <b>eggs</b>, <b>tomato</b>, <b>rice</b> — we'll prioritise meals that use them. <b>Scores each dish</b> by how many ingredients match!</p>
   </div>
 
-  <button class="pick-btn" onclick="pickMeal()">🎲 Pick my meal</button>
+  <!-- PICK BUTTON -->
+  <button class="pick-btn" id="pick-btn" onclick="pickMeal()">🎲 Pick my meal</button>
 
+  <!-- RESULT CARD -->
   <div class="result-card" id="result-card">
-    <div class="meal-name" id="meal-name"></div>
-    <div class="meal-meta" id="meal-meta"></div>
-    <div class="steps-title">How to make it</div>
-    <ol class="steps-list" id="steps-list"></ol>
-    <div class="action-row">
-      <button class="action-btn" onclick="pickMeal()">🔄 Try another</button>
+    <div class="result-header">
+      <div class="result-badge">✨ Your meal pick</div>
+      <div class="meal-name" id="meal-name"></div>
+      <div class="meal-tags" id="meal-tags"></div>
+      <div class="ingredient-match" id="ingredient-match"></div>
+    </div>
+    <div class="result-body">
+      <div class="steps-label">How to make it</div>
+      <ol class="steps-list" id="steps-list"></ol>
+    </div>
+    <div class="result-footer">
+      <button class="action-btn primary" onclick="pickMeal()">🔄 Try another</button>
       <button class="action-btn" onclick="saveMeal()">❤️ Save this</button>
     </div>
   </div>
 
+  <!-- NO RESULTS -->
   <div class="no-results" id="no-results">
-    <div class="emoji">😕</div>
-    <strong>No meals found</strong>
-    <p>Try changing your filters or removing some ingredients.</p>
+    <div class="nr-emoji">😕</div>
+    <h3>No meals found</h3>
+    <p>Your filters are too narrow. Try loosening the cuisine, diet, or time filters — or remove some ingredients.</p>
   </div>
 
-  <div class="history-section" id="history-section">
-    <div class="history-title">❤️ Saved meals</div>
-    <div class="history-chips" id="history-chips"></div>
+  <!-- SAVED MEALS -->
+  <div class="saved-section" id="saved-section">
+    <div class="section-label">❤️ Saved meals</div>
+    <div class="saved-grid" id="saved-grid"></div>
   </div>
 
-  <!-- AD UNIT 2: Replace with your Google AdSense code -->
-  <div class="ad-mid">Advertisement — Replace with Google AdSense code</div>
+  <!-- AD UNIT 2 -->
+  <div class="ad-mid">📢 Advertisement — Replace with Google AdSense code</div>
 
-  <footer>Made with ❤️ · Meal Picker</footer>
+  <footer>Made with ❤️ · Meal Picker · Free forever</footer>
 
 </div>
 
 <script>
-const meals = [
+// ─────────────────────────────────────────
+// MEAL DATABASE — 150+ dishes, 9 cuisines
+// Each meal has an `ingredients` array for
+// smart ingredient matching (FIX #4)
+// ─────────────────────────────────────────
+var meals = [
   // ── INDIAN ──
-  { name:"Masala Omelette", cuisine:"indian", type:"breakfast", time:10, diet:["vegetarian"], meta:"⏱ 10 min · 🍛 Indian · 🌱 Vegetarian", steps:["Beat 2 eggs with salt, chilli, and cumin.","Chop onion, tomato, and coriander finely.","Cook onion in oil for 2 min, then add tomato.","Pour eggs over the mix, fold when set. Serve hot."] },
-  { name:"Dal Tadka", cuisine:"indian", type:"lunch", time:30, diet:["vegan","vegetarian"], meta:"⏱ 30 min · 🍛 Indian · 🌱 Vegan", steps:["Boil 1 cup toor dal with turmeric until soft.","Fry onion, garlic, and tomato in oil.","Add cumin, chilli powder, and garam masala.","Mix dal in, simmer 5 min. Squeeze lemon juice."] },
-  { name:"Paneer Bhurji", cuisine:"indian", type:"dinner", time:20, diet:["vegetarian"], meta:"⏱ 20 min · 🍛 Indian · 🌱 Vegetarian", steps:["Crumble paneer into small rough pieces.","Fry onion and tomato with cumin and spices.","Add paneer, stir well and cook for 5 min.","Garnish with fresh coriander. Serve with roti."] },
-  { name:"Chana Chaat", cuisine:"indian", type:"snack", time:10, diet:["vegan","vegetarian","glutenfree"], meta:"⏱ 10 min · 🍛 Indian · 🌱 Vegan", steps:["Drain and rinse canned chickpeas well.","Add chopped onion, tomato, and cucumber.","Season with chaat masala, lemon juice, and salt.","Mix well and garnish with fresh coriander."] },
-  { name:"Aloo Paratha", cuisine:"indian", type:"breakfast", time:30, diet:["vegetarian"], meta:"⏱ 30 min · 🍛 Indian · 🌱 Vegetarian", steps:["Boil and mash potatoes with spices, chilli, and coriander.","Make a soft wheat dough, divide into balls.","Stuff each ball with potato filling and roll flat.","Cook on a hot tawa with butter until golden on both sides."] },
-  { name:"Rajma Chawal", cuisine:"indian", type:"lunch", time:40, diet:["vegan","vegetarian"], meta:"⏱ 40 min · 🍛 Indian · 🌱 Vegan", steps:["Soak rajma overnight, then pressure cook until soft.","Fry onion, garlic, ginger, and tomato puree together.","Add spices, then rajma with water. Simmer 15 min.","Serve hot over steamed rice with onion on the side."] },
-  { name:"Poha", cuisine:"indian", type:"breakfast", time:15, diet:["vegan","vegetarian"], meta:"⏱ 15 min · 🍛 Indian · 🌱 Vegan", steps:["Rinse flattened rice under water and let it soften.","Fry mustard seeds, curry leaves, onion, and green chilli.","Add turmeric, then softened poha. Mix gently.","Add lemon juice, salt, and coriander. Serve warm."] },
-  { name:"Chole Bhature", cuisine:"indian", type:"lunch", time:45, diet:["vegetarian"], meta:"⏱ 45 min · 🍛 Indian · 🌱 Vegetarian", steps:["Cook soaked chickpeas with a tea bag for colour, pressure cook.","Fry onion, tomato, ginger-garlic with chole masala.","Add chickpeas and simmer until thick and rich.","Serve with deep-fried fluffy bhature and sliced onion."] },
-  { name:"Palak Paneer", cuisine:"indian", type:"dinner", time:30, diet:["vegetarian","glutenfree"], meta:"⏱ 30 min · 🍛 Indian · 🌱 Vegetarian", steps:["Blanch spinach and blend into a smooth puree.","Fry onion, garlic, tomato, and spices in oil.","Add spinach puree and cubed paneer. Simmer 10 min.","Finish with cream and serve with naan or rice."] },
-  { name:"Upma", cuisine:"indian", type:"breakfast", time:20, diet:["vegan","vegetarian"], meta:"⏱ 20 min · 🍛 Indian · 🌱 Vegan", steps:["Dry roast semolina until light golden. Set aside.","Fry mustard seeds, curry leaves, onion, and vegetables.","Add 2 cups water and bring to boil, add salt.","Stir in semolina gradually, mix well until thick. Serve hot."] },
-  { name:"Matar Paneer", cuisine:"indian", type:"dinner", time:30, diet:["vegetarian","glutenfree"], meta:"⏱ 30 min · 🍛 Indian · 🌱 Vegetarian", steps:["Fry onion, ginger-garlic paste until golden.","Add tomato puree with cumin, coriander, and garam masala.","Add green peas and paneer cubes with a little water.","Simmer 10 min until gravy thickens. Garnish with cream."] },
-  { name:"Idli Sambar", cuisine:"indian", type:"breakfast", time:20, diet:["vegan","vegetarian"], meta:"⏱ 20 min · 🍛 Indian · 🌱 Vegan", steps:["Steam idli batter in moulds for 10-12 min.","Boil toor dal with vegetables and tamarind.","Add sambar powder and temper with mustard and curry leaves.","Serve hot idlis with sambar and coconut chutney."] },
-  { name:"Vegetable Biryani", cuisine:"indian", type:"dinner", time:60, diet:["vegetarian"], meta:"⏱ 60 min · 🍛 Indian · 🌱 Vegetarian", steps:["Parboil basmati rice with whole spices until 70% done.","Fry onions until golden, add marinated vegetables.","Layer rice over the filling in a heavy pot.","Seal and dum cook on low heat for 20 min. Serve with raita."] },
-  { name:"Pav Bhaji", cuisine:"indian", type:"snack", time:30, diet:["vegetarian"], meta:"⏱ 30 min · 🍛 Indian · 🌱 Vegetarian", steps:["Boil and mash potatoes, peas, and cauliflower together.","Fry onion, capsicum, tomato with pav bhaji masala.","Mix in mashed vegetables, cook while mashing constantly.","Toast pav buns with butter. Serve with chopped onion and lemon."] },
-  { name:"Dosa", cuisine:"indian", type:"breakfast", time:20, diet:["vegan","vegetarian","glutenfree"], meta:"⏱ 20 min · 🍛 Indian · 🌱 Vegan", steps:["Spread dosa batter thinly on a hot non-stick pan.","Drizzle oil around the edges, cook on medium heat.","Add potato masala filling in the centre if desired.","Fold and serve with sambar and coconut chutney."] },
+  {name:"Masala Omelette",cuisine:"indian",type:"breakfast",time:10,diet:["vegetarian"],ingredients:["eggs","onion","tomato","chilli","coriander","cumin"],meta:["10 min","Indian","Vegetarian"],steps:["Beat 2 eggs with salt, chilli, and cumin.","Chop onion, tomato, and coriander finely.","Cook onion in oil for 2 min, then add tomato.","Pour eggs over, fold when set. Serve hot."]},
+  {name:"Dal Tadka",cuisine:"indian",type:"lunch",time:30,diet:["vegan","vegetarian"],ingredients:["toor dal","onion","tomato","garlic","cumin","turmeric"],meta:["30 min","Indian","Vegan"],steps:["Boil 1 cup toor dal with turmeric until soft.","Fry onion, garlic, and tomato in oil.","Add cumin, chilli powder, and garam masala.","Mix dal in, simmer 5 min. Squeeze lemon juice."]},
+  {name:"Paneer Bhurji",cuisine:"indian",type:"dinner",time:20,diet:["vegetarian"],ingredients:["paneer","onion","tomato","cumin","coriander","capsicum"],meta:["20 min","Indian","Vegetarian"],steps:["Crumble paneer into small pieces.","Fry onion and tomato with cumin and spices.","Add paneer, stir well and cook for 5 min.","Garnish with coriander. Serve with roti."]},
+  {name:"Chana Chaat",cuisine:"indian",type:"snack",time:10,diet:["vegan","vegetarian","glutenfree"],ingredients:["chickpeas","onion","tomato","cucumber","lemon","chaat masala"],meta:["10 min","Indian","Vegan"],steps:["Drain and rinse canned chickpeas.","Add chopped onion, tomato, and cucumber.","Season with chaat masala, lemon juice, and salt.","Garnish with coriander."]},
+  {name:"Aloo Paratha",cuisine:"indian",type:"breakfast",time:30,diet:["vegetarian"],ingredients:["potato","wheat flour","butter","chilli","coriander","cumin"],meta:["30 min","Indian","Vegetarian"],steps:["Boil and mash potatoes with spices and coriander.","Make a soft wheat dough and divide into balls.","Stuff each ball with potato filling and roll flat.","Cook on a hot tawa with butter until golden."]},
+  {name:"Rajma Chawal",cuisine:"indian",type:"lunch",time:40,diet:["vegan","vegetarian"],ingredients:["rajma","rice","onion","tomato","garlic","ginger"],meta:["40 min","Indian","Vegan"],steps:["Soak rajma overnight, pressure cook until soft.","Fry onion, garlic, ginger, and tomato puree.","Add spices and rajma with water. Simmer 15 min.","Serve over steamed rice with onion on the side."]},
+  {name:"Poha",cuisine:"indian",type:"breakfast",time:15,diet:["vegan","vegetarian"],ingredients:["flattened rice","onion","mustard seeds","curry leaves","turmeric","lemon"],meta:["15 min","Indian","Vegan"],steps:["Rinse flattened rice under water and let it soften.","Fry mustard seeds, curry leaves, onion, and green chilli.","Add turmeric, then softened poha. Mix gently.","Add lemon juice, salt, and coriander. Serve warm."]},
+  {name:"Chole Bhature",cuisine:"indian",type:"lunch",time:45,diet:["vegetarian"],ingredients:["chickpeas","onion","tomato","ginger","garlic","chole masala"],meta:["45 min","Indian","Vegetarian"],steps:["Pressure cook soaked chickpeas until soft.","Fry onion, tomato, ginger-garlic with chole masala.","Add chickpeas and simmer until thick.","Serve with deep-fried bhature and sliced onion."]},
+  {name:"Palak Paneer",cuisine:"indian",type:"dinner",time:30,diet:["vegetarian","glutenfree"],ingredients:["spinach","paneer","onion","garlic","tomato","cream"],meta:["30 min","Indian","Vegetarian"],steps:["Blanch spinach and blend into smooth puree.","Fry onion, garlic, tomato, and spices in oil.","Add spinach puree and cubed paneer. Simmer 10 min.","Finish with cream. Serve with naan or rice."]},
+  {name:"Upma",cuisine:"indian",type:"breakfast",time:20,diet:["vegan","vegetarian"],ingredients:["semolina","onion","mustard seeds","curry leaves","carrot","peas"],meta:["20 min","Indian","Vegan"],steps:["Dry roast semolina until light golden. Set aside.","Fry mustard seeds, curry leaves, onion, and vegetables.","Add 2 cups water and bring to boil.","Stir in semolina gradually until thick. Serve hot."]},
+  {name:"Matar Paneer",cuisine:"indian",type:"dinner",time:30,diet:["vegetarian","glutenfree"],ingredients:["paneer","peas","onion","tomato","cream","garam masala"],meta:["30 min","Indian","Vegetarian"],steps:["Fry onion, ginger-garlic paste until golden.","Add tomato puree with cumin, coriander, garam masala.","Add green peas and paneer cubes with water.","Simmer 10 min until gravy thickens."]},
+  {name:"Idli Sambar",cuisine:"indian",type:"breakfast",time:20,diet:["vegan","vegetarian"],ingredients:["idli batter","toor dal","tamarind","sambar powder","mustard seeds","curry leaves"],meta:["20 min","Indian","Vegan"],steps:["Steam idli batter in moulds for 10-12 min.","Boil toor dal with vegetables and tamarind.","Add sambar powder and temper with mustard and curry leaves.","Serve hot idlis with sambar and coconut chutney."]},
+  {name:"Vegetable Biryani",cuisine:"indian",type:"dinner",time:60,diet:["vegetarian"],ingredients:["basmati rice","onion","carrot","peas","saffron","yogurt"],meta:["60 min","Indian","Vegetarian"],steps:["Parboil basmati rice with whole spices until 70% done.","Fry onions golden, add marinated vegetables.","Layer rice over filling in a heavy pot.","Seal and dum cook on low heat for 20 min."]},
+  {name:"Pav Bhaji",cuisine:"indian",type:"snack",time:30,diet:["vegetarian"],ingredients:["potato","peas","cauliflower","onion","capsicum","pav bhaji masala"],meta:["30 min","Indian","Vegetarian"],steps:["Boil and mash potatoes, peas, and cauliflower.","Fry onion, capsicum, tomato with pav bhaji masala.","Mix in mashed vegetables, cook while mashing.","Toast pav buns with butter. Serve with onion and lemon."]},
+  {name:"Dosa",cuisine:"indian",type:"breakfast",time:20,diet:["vegan","vegetarian","glutenfree"],ingredients:["dosa batter","potato","onion","mustard seeds","turmeric","oil"],meta:["20 min","Indian","Vegan"],steps:["Spread dosa batter thinly on a hot non-stick pan.","Drizzle oil around the edges, cook on medium heat.","Add potato masala filling in the centre if desired.","Fold and serve with sambar and coconut chutney."]},
+  {name:"Aloo Gobi",cuisine:"indian",type:"lunch",time:25,diet:["vegan","vegetarian","glutenfree"],ingredients:["potato","cauliflower","onion","tomato","turmeric","cumin"],meta:["25 min","Indian","Vegan"],steps:["Heat oil, add cumin seeds until they splutter.","Add onion and cook until golden brown.","Add potato and cauliflower with turmeric and spices.","Cover and cook 15 min until vegetables are tender."]},
+  {name:"Khichdi",cuisine:"indian",type:"lunch",time:25,diet:["vegan","vegetarian","glutenfree"],ingredients:["rice","moong dal","turmeric","cumin","ghee","ginger"],meta:["25 min","Indian","Vegan"],steps:["Wash rice and moong dal together.","Pressure cook with turmeric, salt, and water until soft.","Heat ghee, add cumin and ginger, pour over khichdi.","Mix well and serve hot with yogurt or pickle."]},
+  {name:"Samosa",cuisine:"indian",type:"snack",time:40,diet:["vegan","vegetarian"],ingredients:["potato","peas","wheat flour","cumin","coriander","oil"],meta:["40 min","Indian","Vegan"],steps:["Make a stiff dough with flour, oil, and water.","Fill with spiced potato and pea mixture.","Shape into triangles and seal edges tightly.","Deep fry until golden and crispy. Serve with chutney."]},
 
   // ── ITALIAN ──
-  { name:"Pasta Aglio e Olio", cuisine:"italian", type:"dinner", time:20, diet:["vegetarian"], meta:"⏱ 20 min · 🍝 Italian · 🌱 Vegetarian", steps:["Boil pasta in salted water until al dente.","Saute sliced garlic in olive oil until golden.","Add chilli flakes and chopped parsley.","Toss pasta in the pan, add pasta water as needed."] },
-  { name:"Margherita Pizza", cuisine:"italian", type:"dinner", time:30, diet:["vegetarian"], meta:"⏱ 30 min · 🍕 Italian · 🌱 Vegetarian", steps:["Spread tomato sauce evenly on pizza base.","Top generously with mozzarella and fresh basil.","Bake in oven at 220C for 12-15 minutes.","Drizzle olive oil before serving."] },
-  { name:"Spaghetti Carbonara", cuisine:"italian", type:"dinner", time:25, diet:["vegetarian"], meta:"⏱ 25 min · 🍝 Italian · 🌱 Vegetarian", steps:["Cook spaghetti until al dente, reserve pasta water.","Beat eggs with grated parmesan and black pepper.","Toss hot pasta with egg mixture off the heat.","Add pasta water gradually to make it creamy. Serve immediately."] },
-  { name:"Bruschetta", cuisine:"italian", type:"snack", time:10, diet:["vegan","vegetarian"], meta:"⏱ 10 min · 🍅 Italian · 🌱 Vegan", steps:["Toast thick bread slices until crispy.","Rub each slice with a cut garlic clove.","Top with diced tomatoes, olive oil, and basil.","Season with salt, pepper, and a splash of balsamic."] },
-  { name:"Pesto Pasta", cuisine:"italian", type:"dinner", time:20, diet:["vegetarian"], meta:"⏱ 20 min · 🍝 Italian · 🌱 Vegetarian", steps:["Cook pasta of choice until al dente.","Blend basil, garlic, pine nuts, parmesan, and olive oil.","Toss hot pasta with pesto, add pasta water to loosen.","Serve with extra parmesan and black pepper."] },
-  { name:"Risotto", cuisine:"italian", type:"dinner", time:35, diet:["vegetarian"], meta:"⏱ 35 min · 🍚 Italian · 🌱 Vegetarian", steps:["Saute onion and garlic in butter until soft.","Add arborio rice and toast for 2 min.","Add warm broth one ladle at a time, stirring constantly.","Finish with parmesan and butter. Season and serve hot."] },
-  { name:"Caprese Salad", cuisine:"italian", type:"snack", time:5, diet:["vegetarian","glutenfree"], meta:"⏱ 5 min · 🍅 Italian · 🌱 Vegetarian", steps:["Slice fresh mozzarella and tomatoes evenly.","Arrange alternating slices on a plate.","Tuck fresh basil leaves between slices.","Drizzle with olive oil, salt, and balsamic glaze."] },
+  {name:"Pasta Aglio e Olio",cuisine:"italian",type:"dinner",time:20,diet:["vegetarian"],ingredients:["pasta","garlic","olive oil","chilli flakes","parsley"],meta:["20 min","Italian","Vegetarian"],steps:["Boil pasta in salted water until al dente.","Saute sliced garlic in olive oil until golden.","Add chilli flakes and chopped parsley.","Toss pasta in the pan with pasta water."]},
+  {name:"Margherita Pizza",cuisine:"italian",type:"dinner",time:30,diet:["vegetarian"],ingredients:["pizza base","tomato sauce","mozzarella","basil","olive oil"],meta:["30 min","Italian","Vegetarian"],steps:["Spread tomato sauce evenly on pizza base.","Top generously with mozzarella and fresh basil.","Bake in oven at 220C for 12-15 minutes.","Drizzle olive oil before serving."]},
+  {name:"Spaghetti Carbonara",cuisine:"italian",type:"dinner",time:25,diet:["vegetarian"],ingredients:["spaghetti","eggs","parmesan","black pepper","salt"],meta:["25 min","Italian","Vegetarian"],steps:["Cook spaghetti until al dente, reserve pasta water.","Beat eggs with grated parmesan and black pepper.","Toss hot pasta with egg mixture off the heat.","Add pasta water gradually to make it creamy."]},
+  {name:"Bruschetta",cuisine:"italian",type:"snack",time:10,diet:["vegan","vegetarian"],ingredients:["bread","tomato","garlic","basil","olive oil","balsamic"],meta:["10 min","Italian","Vegan"],steps:["Toast thick bread slices until crispy.","Rub each slice with a cut garlic clove.","Top with diced tomatoes, olive oil, and basil.","Season with salt, pepper, and balsamic."]},
+  {name:"Pesto Pasta",cuisine:"italian",type:"dinner",time:20,diet:["vegetarian"],ingredients:["pasta","basil","pine nuts","parmesan","garlic","olive oil"],meta:["20 min","Italian","Vegetarian"],steps:["Cook pasta of choice until al dente.","Blend basil, garlic, pine nuts, parmesan, olive oil.","Toss hot pasta with pesto.","Serve with extra parmesan and black pepper."]},
+  {name:"Risotto",cuisine:"italian",type:"dinner",time:35,diet:["vegetarian"],ingredients:["arborio rice","onion","garlic","parmesan","butter","vegetable broth"],meta:["35 min","Italian","Vegetarian"],steps:["Saute onion and garlic in butter until soft.","Add arborio rice and toast for 2 min.","Add warm broth one ladle at a time, stirring.","Finish with parmesan and butter."]},
+  {name:"Caprese Salad",cuisine:"italian",type:"snack",time:5,diet:["vegetarian","glutenfree"],ingredients:["mozzarella","tomato","basil","olive oil","balsamic"],meta:["5 min","Italian","Vegetarian"],steps:["Slice fresh mozzarella and tomatoes evenly.","Arrange alternating slices on a plate.","Tuck fresh basil leaves between slices.","Drizzle with olive oil and balsamic glaze."]},
+  {name:"Minestrone Soup",cuisine:"italian",type:"lunch",time:35,diet:["vegan","vegetarian"],ingredients:["tomato","carrot","celery","onion","pasta","beans"],meta:["35 min","Italian","Vegan"],steps:["Saute onion, carrot, and celery in olive oil.","Add canned tomatoes and vegetable broth.","Add beans and small pasta, simmer 15 min.","Season with salt, pepper, and basil."]},
+  {name:"Focaccia",cuisine:"italian",type:"snack",time:40,diet:["vegan","vegetarian"],ingredients:["flour","olive oil","yeast","rosemary","salt","garlic"],meta:["40 min","Italian","Vegan"],steps:["Mix flour, yeast, olive oil, and salt into dough.","Let rise 20 min in a warm place.","Press into oiled baking tray, dimple with fingers.","Top with rosemary and sea salt. Bake at 200C until golden."]},
 
   // ── CHINESE ──
-  { name:"Fried Rice", cuisine:"chinese", type:"lunch", time:15, diet:["vegetarian","vegan"], meta:"⏱ 15 min · 🍜 Chinese · 🌱 Vegan option", steps:["Heat wok on high, add oil and minced garlic.","Add leftover rice, stir fry constantly.","Push rice aside, scramble 2 eggs in the centre.","Add soy sauce and spring onion. Mix and serve."] },
-  { name:"Veg Noodles", cuisine:"chinese", type:"lunch", time:20, diet:["vegan","vegetarian"], meta:"⏱ 20 min · 🍜 Chinese · 🌱 Vegan", steps:["Boil noodles, rinse under cold water and set aside.","Stir fry garlic, carrot, capsicum, and cabbage on high heat.","Add noodles, soy sauce, vinegar, and chilli sauce.","Toss everything well on high flame. Serve hot."] },
-  { name:"Manchurian", cuisine:"chinese", type:"snack", time:30, diet:["vegan","vegetarian"], meta:"⏱ 30 min · 🍜 Chinese · 🌱 Vegan", steps:["Mix grated vegetables with flour and cornflour, form balls.","Deep fry the balls until golden and crispy.","Saute garlic, ginger, soy sauce, chilli sauce in a wok.","Toss fried balls in the sauce. Garnish with spring onion."] },
-  { name:"Hot and Sour Soup", cuisine:"chinese", type:"lunch", time:20, diet:["vegan","vegetarian"], meta:"⏱ 20 min · 🍜 Chinese · 🌱 Vegan", steps:["Bring vegetable broth to boil with sliced mushrooms.","Add tofu, bamboo shoots, soy sauce, and vinegar.","Mix cornflour with water, stir in to thicken.","Drizzle sesame oil and serve with chilli flakes."] },
-  { name:"Spring Rolls", cuisine:"chinese", type:"snack", time:30, diet:["vegan","vegetarian"], meta:"⏱ 30 min · 🍜 Chinese · 🌱 Vegan", steps:["Stir fry cabbage, carrot, and noodles with soy sauce.","Let filling cool completely before rolling.","Place filling on spring roll sheet, roll tightly and seal.","Deep fry until golden and crispy. Serve with sweet chilli sauce."] },
+  {name:"Fried Rice",cuisine:"chinese",type:"lunch",time:15,diet:["vegetarian","vegan"],ingredients:["rice","eggs","soy sauce","garlic","spring onion","oil"],meta:["15 min","Chinese","Vegan option"],steps:["Heat wok on high, add oil and minced garlic.","Add leftover rice, stir fry constantly.","Push rice aside, scramble 2 eggs in the centre.","Add soy sauce and spring onion. Mix and serve."]},
+  {name:"Veg Noodles",cuisine:"chinese",type:"lunch",time:20,diet:["vegan","vegetarian"],ingredients:["noodles","carrot","capsicum","cabbage","soy sauce","garlic"],meta:["20 min","Chinese","Vegan"],steps:["Boil noodles, rinse under cold water and set aside.","Stir fry garlic, carrot, capsicum, and cabbage.","Add noodles, soy sauce, vinegar, and chilli sauce.","Toss everything well on high flame. Serve hot."]},
+  {name:"Manchurian",cuisine:"chinese",type:"snack",time:30,diet:["vegan","vegetarian"],ingredients:["cabbage","carrot","flour","soy sauce","garlic","ginger"],meta:["30 min","Chinese","Vegan"],steps:["Mix grated vegetables with flour and cornflour, form balls.","Deep fry the balls until golden and crispy.","Saute garlic, ginger, soy sauce, chilli sauce in a wok.","Toss fried balls in the sauce. Garnish with spring onion."]},
+  {name:"Hot and Sour Soup",cuisine:"chinese",type:"lunch",time:20,diet:["vegan","vegetarian"],ingredients:["mushrooms","tofu","soy sauce","vinegar","cornflour","vegetable broth"],meta:["20 min","Chinese","Vegan"],steps:["Bring vegetable broth to boil with sliced mushrooms.","Add tofu, soy sauce, and vinegar.","Mix cornflour with water, stir in to thicken.","Drizzle sesame oil and serve with chilli flakes."]},
+  {name:"Spring Rolls",cuisine:"chinese",type:"snack",time:30,diet:["vegan","vegetarian"],ingredients:["cabbage","carrot","noodles","soy sauce","spring roll sheets","oil"],meta:["30 min","Chinese","Vegan"],steps:["Stir fry cabbage, carrot, and noodles with soy sauce.","Let filling cool completely before rolling.","Place filling on spring roll sheet, roll and seal.","Deep fry until golden. Serve with sweet chilli sauce."]},
+  {name:"Steamed Dumplings",cuisine:"chinese",type:"snack",time:35,diet:["vegetarian"],ingredients:["flour","cabbage","carrot","ginger","soy sauce","sesame oil"],meta:["35 min","Chinese","Vegetarian"],steps:["Mix flour and water into a soft dough, rest 15 min.","Finely chop cabbage, carrot, ginger and mix with soy sauce.","Roll small circles, fill and pleat into dumplings.","Steam for 12 min. Serve with soy dipping sauce."]},
+  {name:"Egg Fried Rice",cuisine:"chinese",type:"dinner",time:15,diet:["vegetarian"],ingredients:["rice","eggs","spring onion","soy sauce","sesame oil","garlic"],meta:["15 min","Chinese","Vegetarian"],steps:["Heat oil in wok on high heat.","Scramble 3 eggs lightly then set aside.","Add cold rice and stir fry until heated through.","Add eggs back, season with soy sauce and sesame oil."]},
 
   // ── MEXICAN ──
-  { name:"Quesadilla", cuisine:"mexican", type:"snack", time:15, diet:["vegetarian"], meta:"⏱ 15 min · 🌮 Mexican · 🌱 Vegetarian", steps:["Place a tortilla flat in a dry pan on medium heat.","Add cheese and your choice of toppings on one half.","Fold tortilla over and press gently with spatula.","Flip when golden brown. Slice into wedges and serve."] },
-  { name:"Guacamole and Chips", cuisine:"mexican", type:"snack", time:10, diet:["vegan","vegetarian","glutenfree"], meta:"⏱ 10 min · 🌮 Mexican · 🌱 Vegan", steps:["Mash 2 ripe avocados with a fork, leave slightly chunky.","Add lime juice, salt, diced onion, and jalapeno.","Mix in chopped cilantro and diced tomato.","Serve immediately with tortilla chips."] },
-  { name:"Bean Tacos", cuisine:"mexican", type:"dinner", time:20, diet:["vegan","vegetarian"], meta:"⏱ 20 min · 🌮 Mexican · 🌱 Vegan", steps:["Heat canned black beans with cumin, garlic, and chilli.","Warm taco shells or corn tortillas in a dry pan.","Fill with beans, shredded lettuce, and tomato.","Top with salsa, sour cream, and lime juice."] },
-  { name:"Burrito Bowl", cuisine:"mexican", type:"lunch", time:25, diet:["vegan","vegetarian","glutenfree"], meta:"⏱ 25 min · 🌮 Mexican · 🌱 Vegan", steps:["Cook rice with lime juice and cilantro.","Warm black beans with cumin, salt, and garlic.","Assemble bowl: rice, beans, corn, avocado, salsa.","Top with sour cream or hot sauce. Serve immediately."] },
-  { name:"Nachos", cuisine:"mexican", type:"snack", time:15, diet:["vegetarian"], meta:"⏱ 15 min · 🌮 Mexican · 🌱 Vegetarian", steps:["Spread tortilla chips on a baking tray.","Top with grated cheese, jalapenos, and black beans.","Bake at 200C for 8-10 min until cheese melts.","Top with sour cream, salsa, and guacamole. Serve hot."] },
+  {name:"Quesadilla",cuisine:"mexican",type:"snack",time:15,diet:["vegetarian"],ingredients:["tortilla","cheese","capsicum","onion","jalapeno"],meta:["15 min","Mexican","Vegetarian"],steps:["Place a tortilla flat in a dry pan on medium heat.","Add cheese and toppings on one half.","Fold tortilla over and press gently.","Flip when golden. Slice into wedges and serve."]},
+  {name:"Guacamole and Chips",cuisine:"mexican",type:"snack",time:10,diet:["vegan","vegetarian","glutenfree"],ingredients:["avocado","lime","onion","cilantro","tomato","jalapeno"],meta:["10 min","Mexican","Vegan"],steps:["Mash 2 ripe avocados, leave slightly chunky.","Add lime juice, salt, diced onion, and jalapeno.","Mix in cilantro and diced tomato.","Serve immediately with tortilla chips."]},
+  {name:"Bean Tacos",cuisine:"mexican",type:"dinner",time:20,diet:["vegan","vegetarian"],ingredients:["black beans","taco shells","lettuce","tomato","salsa","cumin"],meta:["20 min","Mexican","Vegan"],steps:["Heat canned black beans with cumin, garlic, and chilli.","Warm taco shells or corn tortillas in a dry pan.","Fill with beans, shredded lettuce, and tomato.","Top with salsa, sour cream, and lime juice."]},
+  {name:"Burrito Bowl",cuisine:"mexican",type:"lunch",time:25,diet:["vegan","vegetarian","glutenfree"],ingredients:["rice","black beans","corn","avocado","salsa","lime"],meta:["25 min","Mexican","Vegan"],steps:["Cook rice with lime juice and cilantro.","Warm black beans with cumin, salt, and garlic.","Assemble bowl: rice, beans, corn, avocado, salsa.","Top with sour cream or hot sauce."]},
+  {name:"Nachos",cuisine:"mexican",type:"snack",time:15,diet:["vegetarian"],ingredients:["tortilla chips","cheese","jalapeno","black beans","salsa","sour cream"],meta:["15 min","Mexican","Vegetarian"],steps:["Spread tortilla chips on a baking tray.","Top with grated cheese, jalapenos, and black beans.","Bake at 200C for 8-10 min until cheese melts.","Top with sour cream, salsa, and guacamole."]},
+  {name:"Enchiladas",cuisine:"mexican",type:"dinner",time:35,diet:["vegetarian"],ingredients:["tortilla","cheese","enchilada sauce","onion","capsicum","beans"],meta:["35 min","Mexican","Vegetarian"],steps:["Saute onion, capsicum, and beans with spices.","Fill tortillas with mixture and roll tightly.","Place in baking dish, pour enchilada sauce over.","Top with cheese, bake at 190C for 20 min."]},
 
   // ── AMERICAN ──
-  { name:"Avocado Toast", cuisine:"american", type:"breakfast", time:10, diet:["vegan","vegetarian","glutenfree"], meta:"⏱ 10 min · 🇺🇸 American · 🌱 Vegan", steps:["Toast your bread slices until golden.","Mash avocado with lemon juice, salt, and chilli.","Spread generously on the toast.","Top with seeds, cherry tomatoes, or chilli flakes."] },
-  { name:"Banana Pancakes", cuisine:"american", type:"breakfast", time:15, diet:["vegetarian"], meta:"⏱ 15 min · 🇺🇸 American · 🌱 Vegetarian", steps:["Mash 1 ripe banana thoroughly with 2 eggs.","Add a pinch of salt and cinnamon, mix well.","Cook small rounds on a pan on low heat.","Flip when bubbles form on surface. Serve with honey."] },
-  { name:"Classic Grilled Cheese", cuisine:"american", type:"lunch", time:10, diet:["vegetarian"], meta:"⏱ 10 min · 🇺🇸 American · 🌱 Vegetarian", steps:["Butter both sides of two bread slices generously.","Place cheese slices between the bread.","Cook on a pan on medium-low heat, pressing gently.","Flip when golden. Cook until cheese is fully melted."] },
-  { name:"Caesar Salad", cuisine:"american", type:"lunch", time:15, diet:["vegetarian"], meta:"⏱ 15 min · 🥗 American · 🌱 Vegetarian", steps:["Tear romaine lettuce into bite-sized pieces.","Mix mayo, lemon juice, garlic, and parmesan for dressing.","Toss lettuce with dressing until well coated.","Top with croutons and extra parmesan. Serve cold."] },
-  { name:"Mac and Cheese", cuisine:"american", type:"dinner", time:25, diet:["vegetarian"], meta:"⏱ 25 min · 🇺🇸 American · 🌱 Vegetarian", steps:["Cook macaroni until al dente, drain well.","Melt butter, whisk in flour, then slowly add milk.","Add shredded cheddar cheese, stir until smooth.","Mix pasta into cheese sauce. Season and serve hot."] },
-  { name:"French Toast", cuisine:"american", type:"breakfast", time:15, diet:["vegetarian"], meta:"⏱ 15 min · 🇺🇸 American · 🌱 Vegetarian", steps:["Whisk 2 eggs with milk, vanilla, and cinnamon.","Dip bread slices fully into the egg mixture.","Cook on a buttered pan on medium heat.","Flip when golden. Serve with maple syrup and fruit."] },
-  { name:"BLT Sandwich", cuisine:"american", type:"lunch", time:10, diet:["vegetarian"], meta:"⏱ 10 min · 🥪 American · 🌱 Vegetarian option", steps:["Toast bread slices to your liking.","Spread mayo generously on both slices.","Layer lettuce, tomato slices, and your choice of filling.","Season with salt and pepper. Close sandwich and serve."] },
-  { name:"Smoothie Bowl", cuisine:"american", type:"breakfast", time:10, diet:["vegan","vegetarian","glutenfree"], meta:"⏱ 10 min · 🇺🇸 American · 🌱 Vegan", steps:["Blend frozen banana, berries, and plant milk until thick.","Pour into a bowl — it should be thicker than a drink.","Top with granola, fresh fruit, and seeds.","Add a drizzle of honey or peanut butter. Serve immediately."] },
+  {name:"Avocado Toast",cuisine:"american",type:"breakfast",time:10,diet:["vegan","vegetarian","glutenfree"],ingredients:["bread","avocado","lemon","chilli","seeds","cherry tomatoes"],meta:["10 min","American","Vegan"],steps:["Toast your bread slices until golden.","Mash avocado with lemon juice, salt, and chilli.","Spread generously on the toast.","Top with seeds, cherry tomatoes, or chilli flakes."]},
+  {name:"Banana Pancakes",cuisine:"american",type:"breakfast",time:15,diet:["vegetarian"],ingredients:["banana","eggs","cinnamon","honey","butter"],meta:["15 min","American","Vegetarian"],steps:["Mash 1 ripe banana with 2 eggs thoroughly.","Add a pinch of salt and cinnamon, mix well.","Cook small rounds on a pan on low heat.","Flip when bubbles form. Serve with honey."]},
+  {name:"Classic Grilled Cheese",cuisine:"american",type:"lunch",time:10,diet:["vegetarian"],ingredients:["bread","cheese","butter"],meta:["10 min","American","Vegetarian"],steps:["Butter both sides of two bread slices generously.","Place cheese slices between the bread.","Cook on a pan on medium-low heat, pressing gently.","Flip when golden. Cook until cheese is fully melted."]},
+  {name:"Caesar Salad",cuisine:"american",type:"lunch",time:15,diet:["vegetarian"],ingredients:["romaine lettuce","parmesan","mayo","lemon","garlic","croutons"],meta:["15 min","American","Vegetarian"],steps:["Tear romaine lettuce into bite-sized pieces.","Mix mayo, lemon juice, garlic, and parmesan for dressing.","Toss lettuce with dressing until well coated.","Top with croutons and extra parmesan."]},
+  {name:"Mac and Cheese",cuisine:"american",type:"dinner",time:25,diet:["vegetarian"],ingredients:["macaroni","cheddar cheese","butter","milk","flour"],meta:["25 min","American","Vegetarian"],steps:["Cook macaroni until al dente, drain well.","Melt butter, whisk in flour, then slowly add milk.","Add shredded cheddar cheese, stir until smooth.","Mix pasta into cheese sauce. Season and serve hot."]},
+  {name:"French Toast",cuisine:"american",type:"breakfast",time:15,diet:["vegetarian"],ingredients:["bread","eggs","milk","vanilla","cinnamon","maple syrup"],meta:["15 min","American","Vegetarian"],steps:["Whisk 2 eggs with milk, vanilla, and cinnamon.","Dip bread slices fully into the egg mixture.","Cook on a buttered pan on medium heat.","Flip when golden. Serve with maple syrup."]},
+  {name:"Smoothie Bowl",cuisine:"american",type:"breakfast",time:10,diet:["vegan","vegetarian","glutenfree"],ingredients:["banana","berries","plant milk","granola","honey","seeds"],meta:["10 min","American","Vegan"],steps:["Blend frozen banana, berries, and plant milk until thick.","Pour into a bowl, it should be thicker than a drink.","Top with granola, fresh fruit, and seeds.","Add a drizzle of honey or peanut butter."]},
+  {name:"Pancakes",cuisine:"american",type:"breakfast",time:20,diet:["vegetarian"],ingredients:["flour","eggs","milk","butter","baking powder","maple syrup"],meta:["20 min","American","Vegetarian"],steps:["Mix flour, baking powder, and salt in a bowl.","Whisk in egg, milk, and melted butter.","Cook ladlefuls on a greased pan on medium heat.","Flip when bubbles form. Serve in a stack with maple syrup."]},
+  {name:"BLT Sandwich",cuisine:"american",type:"lunch",time:10,diet:["vegetarian"],ingredients:["bread","lettuce","tomato","mayo","salt","pepper"],meta:["10 min","American","Vegetarian"],steps:["Toast bread slices to your liking.","Spread mayo generously on both slices.","Layer lettuce and tomato slices.","Season with salt and pepper. Close and serve."]},
 
   // ── JAPANESE ──
-  { name:"Miso Soup", cuisine:"japanese", type:"breakfast", time:10, diet:["vegan","vegetarian"], meta:"⏱ 10 min · 🍱 Japanese · 🌱 Vegan", steps:["Bring 2 cups water to a gentle simmer.","Dissolve 2 tbsp miso paste in a little warm water.","Add tofu cubes and seaweed to the pot.","Stir in miso, add spring onion. Do not boil after adding miso."] },
-  { name:"Vegetable Sushi Rolls", cuisine:"japanese", type:"lunch", time:30, diet:["vegan","vegetarian"], meta:"⏱ 30 min · 🍱 Japanese · 🌱 Vegan", steps:["Cook sushi rice, season with rice vinegar, sugar, and salt.","Lay nori sheet on a bamboo mat, spread rice evenly.","Add fillings: cucumber, avocado, carrot strips.","Roll tightly, seal edge with water. Slice with a wet knife."] },
-  { name:"Teriyaki Tofu Bowl", cuisine:"japanese", type:"dinner", time:25, diet:["vegan","vegetarian"], meta:"⏱ 25 min · 🍱 Japanese · 🌱 Vegan", steps:["Press tofu dry, slice into thick slabs.","Pan fry tofu in oil until golden on both sides.","Mix soy sauce, mirin, and sugar — pour over tofu and glaze.","Serve over steamed rice with sesame seeds and spring onion."] },
-  { name:"Ramen", cuisine:"japanese", type:"dinner", time:30, diet:["vegetarian"], meta:"⏱ 30 min · 🍜 Japanese · 🌱 Vegetarian", steps:["Simmer vegetable broth with soy sauce, garlic, and ginger.","Cook ramen noodles separately, drain well.","Place noodles in bowl, ladle hot broth over.","Top with soft-boiled egg, corn, nori, and spring onion."] },
-  { name:"Onigiri", cuisine:"japanese", type:"snack", time:15, diet:["vegan","vegetarian"], meta:"⏱ 15 min · 🍱 Japanese · 🌱 Vegan", steps:["Cook short-grain Japanese rice, season lightly with salt.","Wet your hands, take a handful of warm rice.","Press into a triangle shape with filling in the centre.","Wrap with a strip of nori. Serve at room temperature."] },
-  { name:"Edamame", cuisine:"japanese", type:"snack", time:10, diet:["vegan","vegetarian","glutenfree"], meta:"⏱ 10 min · 🍱 Japanese · 🌱 Vegan", steps:["Bring salted water to a boil.","Add fresh or frozen edamame pods.","Boil for 4-5 min until tender but still bright green.","Drain, sprinkle generously with sea salt. Serve warm."] },
-  { name:"Veggie Gyoza", cuisine:"japanese", type:"snack", time:30, diet:["vegetarian"], meta:"⏱ 30 min · 🍱 Japanese · 🌱 Vegetarian", steps:["Mix cabbage, carrot, tofu, and soy sauce for filling.","Place 1 tsp filling in each gyoza wrapper, fold and pleat.","Pan fry in oil until bottoms are golden and crispy.","Add water, cover and steam 3 min. Serve with dipping sauce."] },
+  {name:"Miso Soup",cuisine:"japanese",type:"breakfast",time:10,diet:["vegan","vegetarian"],ingredients:["miso paste","tofu","seaweed","spring onion","water"],meta:["10 min","Japanese","Vegan"],steps:["Bring 2 cups water to a gentle simmer.","Dissolve 2 tbsp miso paste in a little warm water.","Add tofu cubes and seaweed to the pot.","Stir in miso, add spring onion. Do not boil after adding miso."]},
+  {name:"Vegetable Sushi Rolls",cuisine:"japanese",type:"lunch",time:30,diet:["vegan","vegetarian"],ingredients:["sushi rice","nori","cucumber","avocado","carrot","rice vinegar"],meta:["30 min","Japanese","Vegan"],steps:["Cook sushi rice, season with rice vinegar, sugar, and salt.","Lay nori sheet on a bamboo mat, spread rice evenly.","Add fillings: cucumber, avocado, carrot strips.","Roll tightly, seal edge with water. Slice with a wet knife."]},
+  {name:"Teriyaki Tofu Bowl",cuisine:"japanese",type:"dinner",time:25,diet:["vegan","vegetarian"],ingredients:["tofu","soy sauce","mirin","sugar","sesame seeds","rice"],meta:["25 min","Japanese","Vegan"],steps:["Press tofu dry, slice into thick slabs.","Pan fry tofu in oil until golden on both sides.","Mix soy sauce, mirin, and sugar, pour over tofu and glaze.","Serve over steamed rice with sesame seeds."]},
+  {name:"Ramen",cuisine:"japanese",type:"dinner",time:30,diet:["vegetarian"],ingredients:["ramen noodles","vegetable broth","soy sauce","garlic","ginger","egg"],meta:["30 min","Japanese","Vegetarian"],steps:["Simmer vegetable broth with soy sauce, garlic, and ginger.","Cook ramen noodles separately, drain well.","Place noodles in bowl, ladle hot broth over.","Top with soft-boiled egg, corn, nori, and spring onion."]},
+  {name:"Onigiri",cuisine:"japanese",type:"snack",time:15,diet:["vegan","vegetarian"],ingredients:["japanese rice","nori","salt","sesame seeds"],meta:["15 min","Japanese","Vegan"],steps:["Cook short-grain Japanese rice, season lightly.","Wet your hands, take a handful of warm rice.","Press into a triangle shape with filling in the centre.","Wrap with a strip of nori."]},
+  {name:"Edamame",cuisine:"japanese",type:"snack",time:10,diet:["vegan","vegetarian","glutenfree"],ingredients:["edamame","salt","water"],meta:["10 min","Japanese","Vegan"],steps:["Bring salted water to a boil.","Add fresh or frozen edamame pods.","Boil for 4-5 min until tender but bright green.","Drain, sprinkle with sea salt. Serve warm."]},
+  {name:"Veggie Gyoza",cuisine:"japanese",type:"snack",time:30,diet:["vegetarian"],ingredients:["gyoza wrappers","cabbage","carrot","tofu","soy sauce","sesame oil"],meta:["30 min","Japanese","Vegetarian"],steps:["Mix cabbage, carrot, tofu, and soy sauce for filling.","Place filling in each wrapper, fold and pleat.","Pan fry in oil until bottoms are golden.","Add water, cover and steam 3 min. Serve with dipping sauce."]},
+  {name:"Udon Soup",cuisine:"japanese",type:"lunch",time:20,diet:["vegetarian"],ingredients:["udon noodles","soy sauce","mirin","spring onion","mushrooms","vegetable broth"],meta:["20 min","Japanese","Vegetarian"],steps:["Bring vegetable broth to a boil.","Add soy sauce, mirin, and mushrooms.","Cook udon noodles in broth for 5 min.","Serve topped with spring onion and tofu."]},
 
   // ── THAI ──
-  { name:"Pad Thai Veg", cuisine:"thai", type:"dinner", time:25, diet:["vegetarian"], meta:"⏱ 25 min · 🇹🇭 Thai · 🌱 Vegetarian", steps:["Soak rice noodles in warm water until soft, drain.","Stir fry tofu in a wok until golden, set aside.","Add noodles, egg, tamarind paste, and soy sauce.","Toss in bean sprouts and tofu. Top with peanuts and lime."] },
-  { name:"Thai Green Curry", cuisine:"thai", type:"dinner", time:30, diet:["vegan","vegetarian"], meta:"⏱ 30 min · 🇹🇭 Thai · 🌱 Vegan", steps:["Fry green curry paste in coconut oil for 1 min.","Add coconut milk and bring to a gentle simmer.","Add vegetables like zucchini, eggplant, and bell pepper.","Simmer 15 min, add lime juice and basil. Serve with rice."] },
-  { name:"Mango Sticky Rice", cuisine:"thai", type:"snack", time:30, diet:["vegan","vegetarian","glutenfree"], meta:"⏱ 30 min · 🇹🇭 Thai · 🌱 Vegan", steps:["Steam glutinous rice until fully cooked and sticky.","Warm coconut milk with sugar and a pinch of salt.","Pour sweet coconut milk over the hot rice, let it absorb.","Serve alongside sliced ripe mango. Top with extra coconut milk."] },
-  { name:"Tom Yum Soup", cuisine:"thai", type:"lunch", time:20, diet:["vegan","vegetarian"], meta:"⏱ 20 min · 🇹🇭 Thai · 🌱 Vegan", steps:["Boil water with lemongrass, kaffir lime leaves, and galangal.","Add mushrooms and tomatoes, simmer 5 min.","Season with soy sauce, lime juice, and chilli.","Garnish with fresh coriander. Serve piping hot."] },
-  { name:"Thai Fried Rice", cuisine:"thai", type:"lunch", time:15, diet:["vegetarian"], meta:"⏱ 15 min · 🇹🇭 Thai · 🌱 Vegetarian", steps:["Heat oil in a wok, fry garlic and chilli until fragrant.","Add cold leftover rice, stir fry on high heat.","Season with soy sauce and a pinch of sugar.","Add egg, scramble through rice. Serve with lime and cucumber."] },
-  { name:"Papaya Salad", cuisine:"thai", type:"snack", time:10, diet:["vegan","vegetarian","glutenfree"], meta:"⏱ 10 min · 🇹🇭 Thai · 🌱 Vegan", steps:["Shred green papaya into thin strips using a grater.","Pound garlic, chilli, and lime juice in a mortar.","Mix in tomato, green beans, and papaya.","Add sugar and soy sauce to taste. Toss and serve cold."] },
+  {name:"Pad Thai Veg",cuisine:"thai",type:"dinner",time:25,diet:["vegetarian"],ingredients:["rice noodles","tofu","egg","bean sprouts","peanuts","lime"],meta:["25 min","Thai","Vegetarian"],steps:["Soak rice noodles in warm water until soft, drain.","Stir fry tofu in a wok until golden, set aside.","Add noodles, egg, tamarind paste, and soy sauce.","Toss in bean sprouts and tofu. Top with peanuts and lime."]},
+  {name:"Thai Green Curry",cuisine:"thai",type:"dinner",time:30,diet:["vegan","vegetarian"],ingredients:["green curry paste","coconut milk","zucchini","eggplant","basil","lime"],meta:["30 min","Thai","Vegan"],steps:["Fry green curry paste in coconut oil for 1 min.","Add coconut milk and bring to a gentle simmer.","Add vegetables like zucchini, eggplant, and bell pepper.","Simmer 15 min, add lime juice and basil."]},
+  {name:"Mango Sticky Rice",cuisine:"thai",type:"snack",time:30,diet:["vegan","vegetarian","glutenfree"],ingredients:["glutinous rice","coconut milk","sugar","mango","salt"],meta:["30 min","Thai","Vegan"],steps:["Steam glutinous rice until fully cooked and sticky.","Warm coconut milk with sugar and a pinch of salt.","Pour sweet coconut milk over the hot rice, let it absorb.","Serve alongside sliced ripe mango."]},
+  {name:"Tom Yum Soup",cuisine:"thai",type:"lunch",time:20,diet:["vegan","vegetarian"],ingredients:["lemongrass","mushrooms","tomato","lime","chilli","coriander"],meta:["20 min","Thai","Vegan"],steps:["Boil water with lemongrass, kaffir lime leaves, and galangal.","Add mushrooms and tomatoes, simmer 5 min.","Season with soy sauce, lime juice, and chilli.","Garnish with fresh coriander."]},
+  {name:"Thai Fried Rice",cuisine:"thai",type:"lunch",time:15,diet:["vegetarian"],ingredients:["rice","egg","garlic","chilli","soy sauce","lime"],meta:["15 min","Thai","Vegetarian"],steps:["Heat oil in a wok, fry garlic and chilli.","Add cold leftover rice, stir fry on high heat.","Season with soy sauce and a pinch of sugar.","Add egg, scramble through rice. Serve with lime."]},
+  {name:"Papaya Salad",cuisine:"thai",type:"snack",time:10,diet:["vegan","vegetarian","glutenfree"],ingredients:["green papaya","tomato","green beans","lime","garlic","chilli"],meta:["10 min","Thai","Vegan"],steps:["Shred green papaya into thin strips.","Pound garlic, chilli, and lime juice in a mortar.","Mix in tomato, green beans, and papaya.","Add sugar and soy sauce to taste."]},
+  {name:"Thai Red Curry",cuisine:"thai",type:"dinner",time:30,diet:["vegan","vegetarian"],ingredients:["red curry paste","coconut milk","tofu","bell pepper","basil","lime"],meta:["30 min","Thai","Vegan"],steps:["Fry red curry paste in oil until fragrant.","Pour in coconut milk and stir to combine.","Add tofu and vegetables, simmer 15 min.","Finish with lime juice and fresh basil."]},
 
   // ── LEBANESE ──
-  { name:"Hummus and Pita", cuisine:"lebanese", type:"snack", time:10, diet:["vegan","vegetarian"], meta:"⏱ 10 min · 🧆 Lebanese · 🌱 Vegan", steps:["Blend canned chickpeas with tahini, lemon, and garlic.","Add olive oil and a little water until silky smooth.","Spread in a bowl, make a well in the centre.","Drizzle olive oil, sprinkle paprika. Serve with warm pita."] },
-  { name:"Falafel Wrap", cuisine:"lebanese", type:"lunch", time:30, diet:["vegan","vegetarian"], meta:"⏱ 30 min · 🧆 Lebanese · 🌱 Vegan", steps:["Blend chickpeas with parsley, cumin, garlic, and flour.","Shape into small balls and deep fry until crispy golden.","Warm a flatbread or pita on a dry pan.","Fill with falafel, salad, hummus, and garlic sauce."] },
-  { name:"Tabbouleh", cuisine:"lebanese", type:"snack", time:15, diet:["vegan","vegetarian"], meta:"⏱ 15 min · 🧆 Lebanese · 🌱 Vegan", steps:["Soak bulgur wheat in boiling water for 15 min, drain.","Finely chop parsley, mint, tomato, and cucumber.","Mix all vegetables with bulgur, lemon juice, and olive oil.","Season well with salt and pepper. Serve chilled."] },
-  { name:"Manakish", cuisine:"lebanese", type:"breakfast", time:20, diet:["vegetarian"], meta:"⏱ 20 min · 🧆 Lebanese · 🌱 Vegetarian", steps:["Mix za'atar with olive oil to form a paste.","Flatten pizza dough or flatbread into thin rounds.","Spread za'atar paste generously over each round.","Bake at 200C for 8-10 min until edges are crispy."] },
-  { name:"Lentil Soup", cuisine:"lebanese", type:"lunch", time:35, diet:["vegan","vegetarian","glutenfree"], meta:"⏱ 35 min · 🧆 Lebanese · 🌱 Vegan", steps:["Fry onion and garlic in olive oil until golden.","Add red lentils, cumin, turmeric, and vegetable broth.","Simmer 25 min until lentils are fully soft and mushy.","Blend partially for texture, add lemon juice. Serve with bread."] },
+  {name:"Hummus and Pita",cuisine:"lebanese",type:"snack",time:10,diet:["vegan","vegetarian"],ingredients:["chickpeas","tahini","lemon","garlic","olive oil","pita"],meta:["10 min","Lebanese","Vegan"],steps:["Blend canned chickpeas with tahini, lemon, and garlic.","Add olive oil and a little water until silky smooth.","Spread in a bowl, make a well in the centre.","Drizzle olive oil, sprinkle paprika. Serve with warm pita."]},
+  {name:"Falafel Wrap",cuisine:"lebanese",type:"lunch",time:30,diet:["vegan","vegetarian"],ingredients:["chickpeas","parsley","cumin","garlic","flour","flatbread"],meta:["30 min","Lebanese","Vegan"],steps:["Blend chickpeas with parsley, cumin, garlic, and flour.","Shape into small balls and deep fry until crispy.","Warm a flatbread or pita on a dry pan.","Fill with falafel, salad, hummus, and garlic sauce."]},
+  {name:"Tabbouleh",cuisine:"lebanese",type:"snack",time:15,diet:["vegan","vegetarian"],ingredients:["bulgur wheat","parsley","mint","tomato","cucumber","lemon"],meta:["15 min","Lebanese","Vegan"],steps:["Soak bulgur wheat in boiling water for 15 min, drain.","Finely chop parsley, mint, tomato, and cucumber.","Mix all vegetables with bulgur, lemon juice, and olive oil.","Season with salt and pepper. Serve chilled."]},
+  {name:"Manakish",cuisine:"lebanese",type:"breakfast",time:20,diet:["vegetarian"],ingredients:["flatbread","zaatar","olive oil","garlic"],meta:["20 min","Lebanese","Vegetarian"],steps:["Mix zaatar with olive oil to form a paste.","Flatten pizza dough or flatbread into thin rounds.","Spread zaatar paste generously over each round.","Bake at 200C for 8-10 min until edges are crispy."]},
+  {name:"Lentil Soup",cuisine:"lebanese",type:"lunch",time:35,diet:["vegan","vegetarian","glutenfree"],ingredients:["red lentils","onion","garlic","cumin","turmeric","lemon"],meta:["35 min","Lebanese","Vegan"],steps:["Fry onion and garlic in olive oil until golden.","Add red lentils, cumin, turmeric, and vegetable broth.","Simmer 25 min until lentils are fully soft.","Blend partially for texture, add lemon juice."]},
+  {name:"Fattoush Salad",cuisine:"lebanese",type:"lunch",time:15,diet:["vegan","vegetarian"],ingredients:["lettuce","tomato","cucumber","radish","pita","sumac"],meta:["15 min","Lebanese","Vegan"],steps:["Toast or fry pita bread until crispy, break into pieces.","Chop lettuce, tomato, cucumber, and radish.","Mix olive oil, lemon juice, and sumac for dressing.","Toss salad with dressing and top with pita chips."]},
 
   // ── MEDITERRANEAN ──
-  { name:"Greek Salad", cuisine:"mediterranean", type:"lunch", time:10, diet:["vegetarian","glutenfree"], meta:"⏱ 10 min · 🫒 Mediterranean · 🌱 Vegetarian", steps:["Chop cucumber, tomato, and red onion into chunks.","Add kalamata olives and crumbled feta cheese.","Drizzle generously with extra virgin olive oil.","Season with oregano, salt, and pepper. Serve immediately."] },
-  { name:"Shakshuka", cuisine:"mediterranean", type:"breakfast", time:25, diet:["vegetarian","glutenfree"], meta:"⏱ 25 min · 🫒 Mediterranean · 🌱 Vegetarian", steps:["Fry onion, garlic, and bell pepper in olive oil.","Add crushed tomatoes, cumin, paprika, and chilli flakes.","Simmer sauce 10 min until thickened and rich.","Make wells, crack eggs in, cover and cook until set. Serve with bread."] },
-  { name:"Feta and Olive Flatbread", cuisine:"mediterranean", type:"snack", time:15, diet:["vegetarian"], meta:"⏱ 15 min · 🫒 Mediterranean · 🌱 Vegetarian", steps:["Brush flatbread with olive oil and minced garlic.","Top with crumbled feta, olives, and cherry tomatoes.","Add a sprinkle of oregano and chilli flakes.","Bake at 200C for 10 min until edges are crisp and golden."] },
-  { name:"Stuffed Peppers", cuisine:"mediterranean", type:"dinner", time:45, diet:["vegetarian","glutenfree"], meta:"⏱ 45 min · 🫒 Mediterranean · 🌱 Vegetarian", steps:["Cut tops off bell peppers and remove seeds.","Mix cooked rice with tomato, feta, olives, and herbs.","Stuff peppers tightly with the rice mixture.","Drizzle with olive oil, bake at 190C for 30 min until tender."] },
-  { name:"Tzatziki and Veggies", cuisine:"mediterranean", type:"snack", time:10, diet:["vegetarian","glutenfree"], meta:"⏱ 10 min · 🫒 Mediterranean · 🌱 Vegetarian", steps:["Grate cucumber and squeeze out all excess water.","Mix into thick Greek yogurt with minced garlic.","Add olive oil, lemon juice, and fresh dill. Mix well.","Serve with raw vegetable sticks or warm pita bread."] },
+  {name:"Greek Salad",cuisine:"mediterranean",type:"lunch",time:10,diet:["vegetarian","glutenfree"],ingredients:["cucumber","tomato","red onion","feta","olives","olive oil"],meta:["10 min","Mediterranean","Vegetarian"],steps:["Chop cucumber, tomato, and red onion into chunks.","Add kalamata olives and crumbled feta cheese.","Drizzle generously with extra virgin olive oil.","Season with oregano, salt, and pepper."]},
+  {name:"Shakshuka",cuisine:"mediterranean",type:"breakfast",time:25,diet:["vegetarian","glutenfree"],ingredients:["eggs","tomato","onion","garlic","capsicum","cumin"],meta:["25 min","Mediterranean","Vegetarian"],steps:["Fry onion, garlic, and bell pepper in olive oil.","Add crushed tomatoes, cumin, paprika, and chilli flakes.","Simmer sauce 10 min until thickened.","Make wells, crack eggs in, cover and cook until set."]},
+  {name:"Feta and Olive Flatbread",cuisine:"mediterranean",type:"snack",time:15,diet:["vegetarian"],ingredients:["flatbread","feta","olives","cherry tomatoes","oregano","olive oil"],meta:["15 min","Mediterranean","Vegetarian"],steps:["Brush flatbread with olive oil and minced garlic.","Top with crumbled feta, olives, and cherry tomatoes.","Add a sprinkle of oregano and chilli flakes.","Bake at 200C for 10 min until edges are crisp."]},
+  {name:"Stuffed Peppers",cuisine:"mediterranean",type:"dinner",time:45,diet:["vegetarian","glutenfree"],ingredients:["bell peppers","rice","feta","olives","tomato","herbs"],meta:["45 min","Mediterranean","Vegetarian"],steps:["Cut tops off bell peppers and remove seeds.","Mix cooked rice with tomato, feta, olives, and herbs.","Stuff peppers tightly with the rice mixture.","Drizzle with olive oil, bake at 190C for 30 min."]},
+  {name:"Tzatziki and Veggies",cuisine:"mediterranean",type:"snack",time:10,diet:["vegetarian","glutenfree"],ingredients:["greek yogurt","cucumber","garlic","dill","lemon","olive oil"],meta:["10 min","Mediterranean","Vegetarian"],steps:["Grate cucumber and squeeze out all excess water.","Mix into thick Greek yogurt with minced garlic.","Add olive oil, lemon juice, and fresh dill.","Serve with raw vegetable sticks or warm pita."]},
+  {name:"Baba Ganoush",cuisine:"mediterranean",type:"snack",time:35,diet:["vegan","vegetarian","glutenfree"],ingredients:["eggplant","tahini","garlic","lemon","olive oil","cumin"],meta:["35 min","Mediterranean","Vegan"],steps:["Char eggplant directly on flame until skin is burnt.","Peel and scoop out the soft smoky flesh.","Blend with tahini, garlic, lemon juice, and cumin.","Drizzle olive oil on top. Serve with pita or vegetables."]},
 ];
 
-let tags = [], saved = [], lastPick = null;
-const tagArea = document.getElementById('tag-area');
-const tagInput = document.getElementById('tag-input');
+// ─────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────
+var tags = [];
+var saved = [];
+// FIX #3: Track the full history of shown meals to prevent reload bug
+var shownHistory = [];
 
-tagInput.addEventListener('keydown', e => {
+// ─────────────────────────────────────────
+// TAG / INGREDIENT SYSTEM
+// ─────────────────────────────────────────
+var tagArea = document.getElementById('tag-area');
+var tagInput = document.getElementById('tag-input');
+
+tagInput.addEventListener('keydown', function(e) {
   if ((e.key === 'Enter' || e.key === ',') && tagInput.value.trim()) {
     e.preventDefault();
     addTag(tagInput.value.trim());
@@ -249,81 +649,152 @@ tagInput.addEventListener('keydown', e => {
     removeTag(tags.length - 1);
   }
 });
-
-tagArea.addEventListener('click', () => tagInput.focus());
+tagArea.addEventListener('click', function() { tagInput.focus(); });
 
 function addTag(val) {
-  val = val.replace(/,/g,'').trim();
-  if (!val || tags.includes(val.toLowerCase())) return;
-  tags.push(val.toLowerCase());
+  val = val.replace(/,/g,'').trim().toLowerCase();
+  if (!val || tags.includes(val)) return;
+  tags.push(val);
+  // FIX #3: Reset history when user changes ingredients
+  shownHistory = [];
   renderTags();
 }
 
 function removeTag(i) {
   tags.splice(i, 1);
+  shownHistory = [];
   renderTags();
 }
 
 function renderTags() {
-  tagArea.querySelectorAll('.tag').forEach(t => t.remove());
-  tags.forEach((t, i) => {
-    const el = document.createElement('div');
+  tagArea.querySelectorAll('.tag').forEach(function(t){ t.remove(); });
+  tags.forEach(function(t, i) {
+    var el = document.createElement('div');
     el.className = 'tag';
-    el.innerHTML = t + '<button onclick="removeTag(' + i + ')">&times;</button>';
+    el.innerHTML = t + '<button onclick="removeTag(' + i + ')" aria-label="Remove">&times;</button>';
     tagArea.insertBefore(el, tagInput);
   });
 }
 
-function pickMeal() {
-  const cuisine = document.getElementById('cuisine').value;
-  const mealtype = document.getElementById('mealtype').value;
-  const time = document.getElementById('time').value;
-  const diet = document.getElementById('diet').value;
+// ─────────────────────────────────────────
+// FIX #4: SMART INGREDIENT SCORING
+// Scores each meal by how many of the user's
+// ingredients it actually uses
+// ─────────────────────────────────────────
+function scoreByIngredients(meal, userTags) {
+  if (!userTags.length) return 0;
+  var matched = 0;
+  userTags.forEach(function(tag) {
+    var found = meal.ingredients.some(function(ing) {
+      return ing.toLowerCase().includes(tag) || tag.includes(ing.toLowerCase());
+    });
+    if (found) matched++;
+  });
+  return matched;
+}
 
-  let pool = meals.filter(function(m) {
+// ─────────────────────────────────────────
+// PICK MEAL — FIX #3 (reload bug) + FIX #4
+// ─────────────────────────────────────────
+function pickMeal() {
+  var cuisine = document.getElementById('cuisine').value;
+  var mealtype = document.getElementById('mealtype').value;
+  var time = document.getElementById('time').value;
+  var diet = document.getElementById('diet').value;
+
+  // Step 1: Apply hard filters
+  var pool = meals.filter(function(m) {
     if (cuisine !== 'any' && m.cuisine !== cuisine) return false;
     if (mealtype !== 'any' && m.type !== mealtype) return false;
     if (time !== 'any' && m.time > parseInt(time)) return false;
     if (diet !== 'any' && !m.diet.includes(diet)) return false;
-    if (tags.length) {
-      var matched = tags.some(function(tag) {
-        return m.steps.some(function(step) { return step.toLowerCase().includes(tag); });
-      });
-      if (!matched) return false;
-    }
     return true;
   });
 
-  // Fall back to filter-only if ingredient match gives nothing
-  if (!pool.length && tags.length) {
-    pool = meals.filter(function(m) {
-      if (cuisine !== 'any' && m.cuisine !== cuisine) return false;
-      if (mealtype !== 'any' && m.type !== mealtype) return false;
-      if (time !== 'any' && m.time > parseInt(time)) return false;
-      if (diet !== 'any' && !m.diet.includes(diet)) return false;
-      return true;
-    });
-  }
-
+  // Hide old results
   document.getElementById('no-results').style.display = 'none';
   document.getElementById('result-card').classList.remove('show');
 
   if (!pool.length) {
     document.getElementById('no-results').style.display = 'block';
-    document.getElementById('no-results').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     return;
   }
 
-  if (lastPick && pool.length > 1) pool = pool.filter(function(m) { return m.name !== lastPick.name; });
+  // Step 2: FIX #4 — Score by ingredient match and sort
+  if (tags.length) {
+    pool = pool.map(function(m) {
+      return { meal: m, score: scoreByIngredients(m, tags) };
+    });
+    // Sort: highest match first
+    pool.sort(function(a, b) { return b.score - a.score; });
+    // Only keep meals with at least 1 match, unless none match
+    var hasMatches = pool[0].score > 0;
+    if (hasMatches) {
+      var topScore = pool[0].score;
+      // Keep meals within 1 point of best score for some variety
+      pool = pool.filter(function(x) { return x.score >= Math.max(1, topScore - 1); });
+    }
+    pool = pool.map(function(x) { return x.meal; });
+  }
 
-  var pick = pool[Math.floor(Math.random() * pool.length)];
-  lastPick = pick;
+  // Step 3: FIX #3 — Avoid repeating recently shown meals
+  // Remove all meals in recent history from pool
+  var freshPool = pool.filter(function(m) {
+    return !shownHistory.includes(m.name);
+  });
+
+  // If we've exhausted all meals in the pool, reset history and start fresh
+  if (!freshPool.length) {
+    shownHistory = [];
+    freshPool = pool;
+  }
+
+  // Pick randomly from fresh pool
+  var pick = freshPool[Math.floor(Math.random() * freshPool.length)];
+
+  // Record in history
+  shownHistory.push(pick.name);
+  // Keep history bounded to pool size
+  if (shownHistory.length > pool.length) {
+    shownHistory = shownHistory.slice(-Math.floor(pool.length / 2));
+  }
+
   showResult(pick);
 }
 
+// ─────────────────────────────────────────
+// SHOW RESULT
+// ─────────────────────────────────────────
 function showResult(meal) {
   document.getElementById('meal-name').textContent = meal.name;
-  document.getElementById('meal-meta').textContent = meal.meta;
+
+  // Build meta tags
+  var tagsEl = document.getElementById('meal-tags');
+  tagsEl.innerHTML = '';
+  meal.meta.forEach(function(t) {
+    var span = document.createElement('span');
+    span.className = 'meal-tag';
+    span.textContent = t;
+    tagsEl.appendChild(span);
+  });
+
+  // FIX #4: Show ingredient match info
+  var matchEl = document.getElementById('ingredient-match');
+  if (tags.length) {
+    var score = scoreByIngredients(meal, tags);
+    if (score > 0) {
+      matchEl.style.display = 'block';
+      matchEl.textContent = '✅ Matches ' + score + ' of your ' + tags.length + ' ingredient' + (tags.length > 1 ? 's' : '');
+    } else {
+      matchEl.style.display = 'block';
+      matchEl.textContent = '⚠️ No direct ingredient match — closest available option';
+      matchEl.style.color = '#f59e0b';
+    }
+  } else {
+    matchEl.style.display = 'none';
+  }
+
+  // Build steps
   var list = document.getElementById('steps-list');
   list.innerHTML = '';
   meal.steps.forEach(function(s, i) {
@@ -331,34 +802,46 @@ function showResult(meal) {
     li.innerHTML = '<span class="step-num">' + (i+1) + '</span><span>' + s + '</span>';
     list.appendChild(li);
   });
+
   var card = document.getElementById('result-card');
   card.classList.add('show');
   card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
+// ─────────────────────────────────────────
+// SAVE MEAL
+// ─────────────────────────────────────────
 function saveMeal() {
-  if (!lastPick || saved.includes(lastPick.name)) return;
-  saved.push(lastPick.name);
+  var currentName = document.getElementById('meal-name').textContent;
+  if (!currentName || saved.includes(currentName)) return;
+  saved.push(currentName);
   renderSaved();
 }
 
 function renderSaved() {
-  var sec = document.getElementById('history-section');
-  var chips = document.getElementById('history-chips');
+  var sec = document.getElementById('saved-section');
+  var grid = document.getElementById('saved-grid');
   if (!saved.length) { sec.style.display = 'none'; return; }
   sec.style.display = 'block';
-  chips.innerHTML = '';
+  grid.innerHTML = '';
   saved.forEach(function(name) {
     var chip = document.createElement('div');
-    chip.className = 'history-chip';
-    chip.textContent = name;
+    chip.className = 'saved-chip';
+    chip.innerHTML = '❤️ ' + name;
     chip.onclick = function() {
       var m = meals.find(function(x) { return x.name === name; });
       if (m) showResult(m);
     };
-    chips.appendChild(chip);
+    grid.appendChild(chip);
   });
 }
+
+// Reset shown history when any filter changes
+['cuisine','mealtype','time','diet'].forEach(function(id) {
+  document.getElementById(id).addEventListener('change', function() {
+    shownHistory = [];
+  });
+});
 </script>
 </body>
 </html>
